@@ -1,5 +1,5 @@
 FROM python:3.11.2-slim-buster
-WORKDIR D:\repos\Taller2\template
+WORKDIR .
 
 RUN pip install fastapi==0.95.0
 RUN pip install uvicorn==0.20.0
