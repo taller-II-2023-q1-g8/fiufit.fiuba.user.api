@@ -1,6 +1,6 @@
-from ddd.domain.user import user
+from ddd.domain.user import User
 
 
 def test_my_function():
-    var = user.User("soyJuan", "Juan")
+    var = User("soyJuan", "Juan")
     assert 1 == 2 - 1
