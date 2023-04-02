@@ -1,4 +1,4 @@
-from ddd.domain.user import User
+from ..ddd.domain.user import User
 
 
 def test_my_function():
