@@ -1,7 +1,5 @@
 fastAPI==0.95.0
 uvicorn==0.20.0
-fastAPI
-uvicorn
 sqlalchemy
 psycopg2-binary
 pytest
