@@ -26,7 +26,7 @@ jobs:
         pytest tests/
     - name: Build coverage file
       run: |
-        pytest --cache-clear --cov=app --cov-report=xml tests/
+        pytest --cache-clear --cov=ddd --cov-report=xml tests/
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
       with:
