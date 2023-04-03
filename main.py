@@ -1,5 +1,6 @@
 from fastapi import FastAPI
-from ddd.application.user.use_cases import user_routes
+from src.presentation.user_api import user_routes
+from src.infrastructure.database import Base, engine
 
 app = FastAPI()
 app.include_router(user_routes)

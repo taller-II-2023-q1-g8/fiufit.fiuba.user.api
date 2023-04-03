@@ -1,9 +1,9 @@
 from typing import Optional
-from ddd.domain.user.user_repository import UserRepository
-from ddd.infrastructure.database import SessionLocal
-from ddd.infrastructure.models import UserModel
-from ddd.infrastructure.user_dto import UserDTO
-from ddd.domain.user.user import User
+from src.domain.user.user_repository import UserRepository
+from src.infrastructure.database import SessionLocal
+from src.infrastructure.models.user import UserModel
+from src.infrastructure.models.user_dto import UserDTO
+from src.domain.user.user import User
 
 class UserTable(UserRepository):
     def find_by_id(self, id: str) -> Optional[User]:
