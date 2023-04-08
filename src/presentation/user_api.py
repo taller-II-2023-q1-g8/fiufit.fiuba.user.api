@@ -11,6 +11,6 @@ user_repository = UserTable()
 async def requests_user_with_id(id: str):
     return use_case.requests_user_with_id(id)
 
-@user_routes.put("/")
+@user_routes.put("/")   
 async def wants_to_create_user(user_data: UserSignUpDTO):
-    use_case.wants_to_create_user(user_data)
+    return use_case.wants_to_create_user(user_data)

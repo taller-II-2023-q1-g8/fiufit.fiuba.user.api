@@ -16,7 +16,4 @@ firebase=pyrebase.initialize_app(firebaseConfig)
 auth=firebase.auth()
 
 def sign_up(email: str, password: str):
-    try:
-        user = auth.create_user_with_email_and_password(email, password)
-    except Exception as e:
-        print("Error Creating User with Firebase:", e)
+    auth.create_user_with_email_and_password(email, password)

@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, status
 from src.infrastructure.models.user_dto import UserDTO, UserSignUpDTO
 from src.infrastructure.user_repository_postgresql import UserTable
 from src.infrastructure.firebase import sign_up as firebase_sign_up
@@ -10,8 +10,16 @@ def requests_user_with_id(id: str):
     return user_repository.find_by_id(id)
 
 def wants_to_create_user(user_data: UserSignUpDTO):
-    firebase_sign_up(user_data.email, user_data.password)
-    user_repository.create(user_data)
+    try:
+        firebase_sign_up(user_data.email, user_data.password)
+    except:
+        return {"message": "email already exists"}, status.HTTP_406_NOT_ACCEPTABLE
+    try:
+        user_repository.create(user_data)
+    except:
+        return {"message": "id already exists"}, status.HTTP_406_NOT_ACCEPTABLE
+    
+    return status.HTTP_201_CREATED
 
 def wants_to_delete_user(user_data: UserDTO):
     raise NotImplementedError
