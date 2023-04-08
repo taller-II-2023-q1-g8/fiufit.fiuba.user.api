@@ -1,7 +1,7 @@
 from fastapi import APIRouter
-from src.infrastructure.models.user_dto import UserDTO
+from src.infrastructure.models.user_dto import UserDTO, UserSignUpDTO
 from src.infrastructure.user_repository_postgresql import UserTable
-
+from src.infrastructure.firebase import sign_up as firebase_sign_up
 user_routes = APIRouter(prefix="/user")
 user_repository = UserTable()
 
@@ -9,7 +9,8 @@ user_repository = UserTable()
 def requests_user_with_id(id: str):
     return user_repository.find_by_id(id)
 
-def wants_to_create_user(user_data: UserDTO):
+def wants_to_create_user(user_data: UserSignUpDTO):
+    firebase_sign_up(user_data.email, user_data.password)
     user_repository.create(user_data)
 
 def wants_to_delete_user(user_data: UserDTO):
