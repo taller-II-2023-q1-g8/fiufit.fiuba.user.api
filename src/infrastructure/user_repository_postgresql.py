@@ -2,7 +2,7 @@ from typing import Optional
 from src.domain.user.user_repository import UserRepository
 from src.infrastructure.database import SessionLocal
 from src.infrastructure.models.user import UserModel
-from src.infrastructure.models.user_dto import UserSignUpDTO
+from src.infrastructure.models.user_dto import UserSignUpDTO, UserDTO
 from src.domain.user.user import User
 
 
@@ -26,4 +26,15 @@ class UserTable(UserRepository):
         session = SessionLocal()
         user_to_delete = session.query(UserModel).filter(UserModel.id == id).first()
         session.delete(user_to_delete)
+        session.commit()
+
+    def update(self, user_data: UserDTO):
+        session = SessionLocal()
+        user_to_update = session.query(UserModel).filter(UserModel.id == user_data.id).first()
+        user_to_update.id = user_data.id
+        user_to_update.firstname = user_data.firstname
+        user_to_update.email = user_data.email
+        user_to_update.phone_number = user_data.phone_number
+        user_to_update.gender = user_data.gender
+        user_to_update.birth_date = user_data.birth_date
         session.commit()

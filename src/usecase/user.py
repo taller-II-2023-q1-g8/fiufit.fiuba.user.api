@@ -30,6 +30,12 @@ def wants_to_delete_user(id: str):
         raise exceptions.HTTPException(status_code=404, detail="user to delete not found")
 
 
+def wants_to_update_user(user_data: UserDTO):
+    try:
+        user_repository.update(user_data)
+    except:
+        raise exceptions.HTTPException(status_code=404, detail="user to update not found")
+
 def wants_to_subscribe_to_training(training_id: int):
     raise NotImplementedError
 

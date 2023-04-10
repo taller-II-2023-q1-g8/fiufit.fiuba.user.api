@@ -20,5 +20,10 @@ async def wants_to_create_user(user_data: UserSignUpDTO):
 
 
 @user_routes.delete("/{id}", status_code=204, response_description="Delete user by id")
-async def requests_user_with_id(id: str):
-    return use_case.requests_user_with_id(id)
+async def wants_to_delete_user(id: str):
+    return use_case.wants_to_delete_user(id)
+
+
+@user_routes.post("/", status_code=204, response_description="Update an user")
+async def wants_to_update_user(user_data: UserDTO):
+    return use_case.wants_to_update_user(user_data)
