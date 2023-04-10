@@ -5,6 +5,7 @@ from src.infrastructure.models.user import UserModel
 from src.infrastructure.models.user_dto import UserSignUpDTO
 from src.domain.user.user import User
 
+
 class UserTable(UserRepository):
     def find_by_id(self, id: str) -> Optional[User]:
         session = SessionLocal()
@@ -19,4 +20,10 @@ class UserTable(UserRepository):
             phone_number=user_data.phone_number,
             gender=user_data.gender,
             birth_date=user_data.birth_date))
+        session.commit()
+
+    def delete(self, id: str):
+        session = SessionLocal()
+        user_to_delete = session.query(UserModel).filter(UserModel.id == id).first()
+        session.delete(user_to_delete)
         session.commit()
