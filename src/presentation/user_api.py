@@ -10,6 +10,10 @@ user_repository = UserTable()
 user_service = UserService(user_repository)
 
 # Transaction Model
+@user_routes.get("/", status_code=200, response_description="Get user id list")
+async def requests_user_list():
+    return user_service.requests_all_user_ids()
+
 @user_routes.get("/{id}", status_code=200, response_description="Get user by id")
 async def requests_user_with_id(id: str):
     return user_service.requests_user_with_id(id)

@@ -7,6 +7,10 @@ from src.domain.user.user import User
 
 
 class UserTable(UserRepository):
+    def all_user_ids(self):
+        session = SessionLocal()
+        return list(map(lambda user: user.id, session.query(UserModel).all()))
+
     def find_by_id(self, id: str) -> Optional[User]:
         session = SessionLocal()
         return session.query(UserModel).filter(UserModel.id == id).first()

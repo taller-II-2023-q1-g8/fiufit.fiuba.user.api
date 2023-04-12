@@ -6,6 +6,9 @@ class UserService():
         self.user_repository = user_repository    
 
     #Transaction Model
+    def requests_all_user_ids(self):
+        return self.user_repository.all_user_ids()
+
     def requests_user_with_id(self, id: str):
         return self.user_repository.find_by_id(id)
 
