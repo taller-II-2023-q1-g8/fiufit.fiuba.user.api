@@ -15,6 +15,10 @@ class UserTable(UserRepository):
         session = SessionLocal()
         return session.query(UserModel).filter(UserModel.id == id).first()
 
+    def find_by_email(self, email: str) -> Optional[User]:
+        session = SessionLocal()
+        return session.query(UserModel).filter(UserModel.email == email).first()
+
     def create(self, user_data: UserSignUpDTO) -> Optional[User]:
         session = SessionLocal()
         session.add(UserModel(
