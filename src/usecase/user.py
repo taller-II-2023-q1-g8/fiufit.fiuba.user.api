@@ -14,8 +14,8 @@ class UserService():
 
     def wants_to_create_user(self, user_data: UserSignUpDTO):
         try:
-            self.user_repository.create(user_data)
-        except:
+            print(self.user_repository.create(user_data=user_data))
+        except Exception as e:
             raise exceptions.HTTPException(status_code=406, detail="id already exists")
     
     def wants_to_delete_user(self, id: str):
