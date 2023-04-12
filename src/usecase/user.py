@@ -18,7 +18,7 @@ class UserService():
         except:
             raise exceptions.HTTPException(status_code=406, detail="id already exists")
     
-    def wants_to_delete_user(self, d: str):
+    def wants_to_delete_user(self, id: str):
         try:
             self.user_repository.delete(id)
         except:
