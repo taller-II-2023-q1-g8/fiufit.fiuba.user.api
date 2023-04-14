@@ -6,21 +6,21 @@ class UserService():
         self.user_repository = user_repository    
 
     #Transaction Model
-    def requests_all_user_ids(self):
-        return self.user_repository.all_user_ids()
+    def requests_all_usernames(self):
+        return self.user_repository.all_usernames()
 
-    def requests_user_with_id(self, id: str):
-        return self.user_repository.find_by_id(id)
+    def requests_user_with_username(self, username: str):
+        return self.user_repository.find_by_username(username)
 
     def wants_to_create_user(self, user_data: UserSignUpDTO):
         try:
             print(self.user_repository.create(user_data=user_data))
         except Exception as e:
-            raise exceptions.HTTPException(status_code=406, detail="id already exists")
+            raise exceptions.HTTPException(status_code=406, detail="username already exists")
     
-    def wants_to_delete_user(self, id: str):
+    def wants_to_delete_user(self, username: str):
         try:
-            self.user_repository.delete(id)
+            self.user_repository.delete(username)
         except:
             raise exceptions.HTTPException(status_code=404, detail="user to delete not found")
 

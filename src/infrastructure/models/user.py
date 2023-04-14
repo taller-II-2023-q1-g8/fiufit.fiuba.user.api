@@ -5,7 +5,7 @@ from src.infrastructure.database import Base, engine
 
 class UserModel(Base):
     __tablename__ = "users"
-    id = Column(String, primary_key=True)
+    username = Column(String, primary_key=True)
     email = Column(String)
     phone_number = Column(String)
     gender = Column(String)

@@ -10,13 +10,13 @@ user_repository = UserTable()
 user_service = UserService(user_repository)
 
 # Transaction Model
-@user_routes.get("/", status_code=200, response_description="Get user id list")
+@user_routes.get("/", status_code=200, response_description="Get usernames list")
 async def requests_user_list():
-    return user_service.requests_all_user_ids()
+    return user_service.requests_all_usernames()
 
-@user_routes.get("/{id}", status_code=200, response_description="Get user by id")
-async def requests_user_with_id(id: str):
-    return user_service.requests_user_with_id(id)
+@user_routes.get("/{username}", status_code=200, response_description="Get user by username")
+async def requests_user_with_username(username: str):
+    return user_service.requests_user_with_username(username)
 
 
 @user_routes.put("/", status_code=201, response_description="Create a new user")
@@ -26,15 +26,15 @@ async def wants_to_create_user(user_data: UserSignUpDTO):
         try:
             fb_sign_up(user_data.email, user_data.password)
         except:
-            user_repository.delete(user_data.id)
+            user_repository.delete(user_data.username)
             raise exceptions.HTTPException(status_code=406, detail="[ERROR] email registered in firebase, but is not in application database")
     else:
         raise exceptions.HTTPException(status_code=406, detail="email in use")
 
 
-@user_routes.delete("/{id}", status_code=204, response_description="Delete user by id")
-async def wants_to_delete_user(id: str):
-    return user_service.wants_to_delete_user(id)
+@user_routes.delete("/{username}", status_code=204, response_description="Delete user by username")
+async def wants_to_delete_user(username: str):
+    return user_service.wants_to_delete_user(username)
 
 
 @user_routes.post("/", status_code=204, response_description="Update an user")

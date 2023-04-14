@@ -2,7 +2,7 @@ from pydantic import BaseModel
 import datetime
 
 class UserDTO(BaseModel):
-    id: str
+    username: str
     firstname: str
     birth_date: datetime.date
     gender: str
@@ -10,7 +10,7 @@ class UserDTO(BaseModel):
     phone_number: str
 
 class UserSignUpDTO(BaseModel):
-    id: str
+    username: str
     firstname: str
     birth_date: datetime.date
     gender: str

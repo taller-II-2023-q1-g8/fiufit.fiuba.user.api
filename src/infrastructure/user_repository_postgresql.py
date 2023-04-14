@@ -7,13 +7,13 @@ from src.domain.user.user import User
 
 
 class UserTable(UserRepository):
-    def all_user_ids(self):
+    def all_usernames(self):
         session = SessionLocal()
-        return list(map(lambda user: user.id, session.query(UserModel).all()))
+        return list(map(lambda user: user.username, session.query(UserModel).all()))
 
-    def find_by_id(self, id: str) -> Optional[User]:
+    def find_by_username(self, username: str) -> Optional[User]:
         session = SessionLocal()
-        return session.query(UserModel).filter(UserModel.id == id).first()
+        return session.query(UserModel).filter(UserModel.username == username).first()
 
     def find_by_email(self, email: str) -> Optional[User]:
         session = SessionLocal()
@@ -22,7 +22,7 @@ class UserTable(UserRepository):
     def create(self, user_data: UserSignUpDTO) -> Optional[User]:
         session = SessionLocal()
         session.add(UserModel(
-            id=user_data.id, 
+            username=user_data.username, 
             firstname=user_data.firstname,
             email=user_data.email,
             phone_number=user_data.phone_number,
@@ -30,16 +30,16 @@ class UserTable(UserRepository):
             birth_date=user_data.birth_date))
         session.commit()
 
-    def delete(self, id: str):
+    def delete(self, username: str):
         session = SessionLocal()
-        user_to_delete = session.query(UserModel).filter(UserModel.id == id).first()
+        user_to_delete = session.query(UserModel).filter(UserModel.username == username).first()
         session.delete(user_to_delete)
         session.commit()
 
     def update(self, user_data: UserDTO):
         session = SessionLocal()
-        user_to_update = session.query(UserModel).filter(UserModel.id == user_data.id).first()
-        user_to_update.id = user_data.id
+        user_to_update = session.query(UserModel).filter(UserModel.username == user_data.username).first()
+        user_to_update.username = user_data.username
         user_to_update.firstname = user_data.firstname
         user_to_update.email = user_data.email
         user_to_update.phone_number = user_data.phone_number

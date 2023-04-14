@@ -2,14 +2,14 @@
 class User():
     def __init__(
         self,
-        id: str,
+        username: str,
         firstname: str,
     ):
-        self.id: str = id
+        self.username: str = username
         self.firstname: str = firstname
 
     def __eq__(self, o: object) -> bool:
         if isinstance(o, User):
-            return self.id == o.id
+            return self.username == o.username
 
         return False
