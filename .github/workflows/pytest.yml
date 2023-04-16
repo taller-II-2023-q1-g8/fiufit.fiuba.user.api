@@ -23,10 +23,10 @@ jobs:
     #----------------------------------------------
     - name: Run tests
       run: |
-        pytest src/tests/
+        pytest src/
     - name: Build coverage file
       run: |
-        pytest --cache-clear --cov=ddd --cov-report=xml tests/
+        pytest --cache-clear --cov=src --cov-report=xml src/
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
       with:

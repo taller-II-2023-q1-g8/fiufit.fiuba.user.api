@@ -62,6 +62,7 @@ class FakeAuthServiceAlwaysOk():
         """Does nothing"""
         # pylint: disable=unused-argument
         return None
+
 class FakeAuthServiceAlwaysError():
     """Fake Auth Service that always raises an exception"""
     def sign_up(self, email, password):
@@ -80,7 +81,7 @@ test_user_data = UserSignUpDTO(
     )
 
 #Tests
-def used_email_raises_exception():
+def test_used_email_raises_exception():
     """Tests that the user service raises an exception when\
           trying to create a user with an email that already exists"""
     user_service = UserService(UserRepoAlwaysEmailUnavailable(), FakeAuthServiceAlwaysOk())
@@ -91,7 +92,7 @@ def used_email_raises_exception():
         assert exc.status_code == 409
         assert exc.detail == "Email already exists"
 
-def used_username_raises_exception():
+def test_used_username_raises_exception():
     """Tests that the user service raises an exception when trying \
         to create a user with an username that already exists"""
     user_service = UserService(UserRepoAlwaysUsernameUnavailable(), FakeAuthServiceAlwaysOk())
@@ -101,7 +102,7 @@ def used_username_raises_exception():
         assert exc.status_code == 409
         assert exc.detail == "Username already exists"
 
-def auth_service_error_raises_exception():
+def test_auth_service_error_raises_exception():
     """Tests that the user service raises an exception when trying \
         to create a user and the auth service raises an exception"""
     user_service = UserService(FakeUserRepoAlwaysOk(), FakeAuthServiceAlwaysError())
