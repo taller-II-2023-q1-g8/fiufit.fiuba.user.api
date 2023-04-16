@@ -3,11 +3,11 @@ from fastapi import APIRouter, exceptions
 from src.infrastructure.models.user_dto import UserDTO, UserSignUpDTO
 from src.infrastructure.user_repository_postgresql import UserTable
 from src.usecase.user import UserService
-
+import src.infrastructure.firebase as firebase
 
 user_routes = APIRouter(prefix="/user")
 user_repository = UserTable()
-user_service = UserService(user_repository) #Application Layer User Service
+user_service = UserService(user_repository, firebase) #Application Layer User Service
     
 
 # Transaction Model
