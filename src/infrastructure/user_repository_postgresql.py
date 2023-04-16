@@ -1,5 +1,4 @@
 """User Repository Implementation for PostgreSQL"""
-
 from typing import Optional
 from src.domain.user.user_repository import IUserRepository
 from src.infrastructure.database import SessionLocal
@@ -9,6 +8,8 @@ from src.domain.user.user import User
 
 
 class UserTable(IUserRepository):
+    """Repository Definition"""
+
     def all_usernames(self):
         """Get all usernames"""
         session = SessionLocal()

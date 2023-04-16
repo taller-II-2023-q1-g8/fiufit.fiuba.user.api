@@ -1,17 +1,14 @@
 """User API Router"""
-
-from typing import Any
-from fastapi import APIRouter, exceptions
+from fastapi import APIRouter
 from src.infrastructure.models.user_dto import UserDTO, UserSignUpDTO
 from src.infrastructure.user_repository_postgresql import UserTable
 from src.usecase.user import UserService
-import src.infrastructure.firebase as firebase
+from src.infrastructure import firebase
 
 
 user_routes = APIRouter(prefix="/user")
 user_repository = UserTable()
 user_service = UserService(user_repository, firebase) #Application Layer User Service
- 
 
 # Transaction Model
 @user_routes.get("/", status_code=200, response_description="Get usernames list")

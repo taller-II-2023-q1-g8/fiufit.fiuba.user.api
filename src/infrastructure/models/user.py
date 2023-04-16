@@ -1,5 +1,4 @@
 """User Model for ORM"""
-
 from sqlalchemy import Column, String, Date
 from src.infrastructure.database import Base, engine
 

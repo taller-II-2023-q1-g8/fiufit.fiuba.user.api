@@ -1,5 +1,4 @@
 """ Data Transfer Objects for User Model"""
-
 import datetime
 from pydantic import BaseModel
 

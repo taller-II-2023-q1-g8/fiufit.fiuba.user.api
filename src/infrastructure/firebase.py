@@ -1,5 +1,4 @@
 """Firebase configuration for FIUFIT"""
-
 import pyrebase
 
 

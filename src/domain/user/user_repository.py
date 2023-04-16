@@ -1,14 +1,14 @@
 """User Repository Interface"""
-
 from abc import ABC, abstractmethod
 from typing import Optional
 from src.domain.user.user import User
+from src.infrastructure.models.user_dto import UserDTO, UserSignUpDTO
 
 
 class IUserRepository(ABC):
     """User Repository Interface Definition"""
     @abstractmethod
-    def create(self, user: User) -> Optional[User]:
+    def create(self, user_data: UserSignUpDTO) -> Optional[User]:
         """Create a new user"""
         raise NotImplementedError
 
@@ -33,6 +33,6 @@ class IUserRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def update(self, user: User):
+    def update(self, user_data: UserDTO):
         """Update a user"""
         raise NotImplementedError
