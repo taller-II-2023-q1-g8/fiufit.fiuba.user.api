@@ -23,7 +23,7 @@ jobs:
     #----------------------------------------------
     - name: Run tests
       run: |
-        pytest tests/
+        pytest src/tests/
     - name: Build coverage file
       run: |
         pytest --cache-clear --cov=ddd --cov-report=xml tests/
