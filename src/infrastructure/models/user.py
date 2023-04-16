@@ -1,9 +1,11 @@
+"""User Model for ORM"""
+
 from sqlalchemy import Column, String, Date
-from sqlalchemy.ext.declarative import declarative_base
 from src.infrastructure.database import Base, engine
 
 
 class UserModel(Base):
+    "User Model Definition"
     __tablename__ = "users"
     username = Column(String, primary_key=True)
     email = Column(String, unique=True)

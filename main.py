@@ -1,10 +1,14 @@
 from fastapi import FastAPI
 from src.presentation.user_api import user_routes
-from src.infrastructure.database import Base, engine
+
+"""
+Application Entry Point
+"""
 
 app = FastAPI()
 app.include_router(user_routes)
 
-@app.get("/")
+@app.get("/healthcheck")
 async def root():
-    return "Template Microserivicio"
+    """Healthcheck endpoint"""
+    return "Users Microservice is up and running"

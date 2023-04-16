@@ -1,8 +1,12 @@
-from fastapi import APIRouter, status, exceptions
+"""Application Service for Users"""
+
+from fastapi import exceptions
+from src.domain.user.user_repository import IUserRepository
 from src.infrastructure.models.user_dto import UserDTO, UserSignUpDTO
 
+
 class UserService():
-    def __init__(self, user_repository, auth_service):
+    def __init__(self, user_repository: IUserRepository, auth_service):
         self.user_repository = user_repository    
         self.auth_service = auth_service
 

@@ -1,5 +1,8 @@
-#Entity
+"""User Domain Entity"""
+
+
 class User():
+    """User Domain Entity Definition"""
     def __init__(
         self,
         username: str,
@@ -8,8 +11,11 @@ class User():
         self.username: str = username
         self.firstname: str = firstname
 
-    def __eq__(self, o: object) -> bool:
-        if isinstance(o, User):
-            return self.username == o.username
+    def __eq__(self, obj: object) -> bool:
+        if isinstance(obj, User):
+            return self.username == obj.username
 
         return False
+    
+    def name(self):
+        return self.firstname

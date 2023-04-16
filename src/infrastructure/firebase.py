@@ -1,3 +1,5 @@
+"""Firebase configuration for FIUFIT"""
+
 import pyrebase
 
 
@@ -10,10 +12,11 @@ firebaseConfig = {
   "appId": "1:587864716594:web:30d86e78e5c21d366f132b",
   "measurementId": "G-TCBPRSHX8M",
   "databaseURL": "https://fiufit-18294.firebaseio.com/" 
-};
+}
 
 firebase=pyrebase.initialize_app(firebaseConfig)
 auth=firebase.auth()
 
 def sign_up(email: str, password: str):
+    """Sign up a new user in firebase"""
     auth.create_user_with_email_and_password(email, password)

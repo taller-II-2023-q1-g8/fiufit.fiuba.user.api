@@ -1,7 +1,10 @@
+"""Database Connection"""
+
+from os import environ
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from os import environ
+
 
 SQLALCHEMY_DATABASE_URL = "postgresql://user:password@postgres/db"
 
@@ -11,7 +14,7 @@ try:
         print("DATABASE_URL Found in Environment:", SQLALCHEMY_DATABASE_URL)
     else:
         print("DATABASE_URL Found in Environment is None")
-except:
+except KeyError:
     print("DATABASE_URL NOT Found in Environment, using local url")
 
 
