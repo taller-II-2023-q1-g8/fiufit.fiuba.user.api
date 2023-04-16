@@ -16,6 +16,7 @@ class User():
             return self.username == obj.username
 
         return False
-    
+
     def name(self):
+        """Returns the name of the user"""
         return self.firstname
