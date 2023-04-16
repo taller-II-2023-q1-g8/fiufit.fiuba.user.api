@@ -16,14 +16,15 @@ class UserService():
     def wants_to_create_user(self, user_data: UserSignUpDTO):
         try:
             self.user_repository.create(user_data=user_data)
-        except Exception as e:
-            print(e)
-            raise exceptions.HTTPException(status_code=406)
+        except Exception:
+            if self.user_repository.find_by_email(user_data.email) is not None:
+                raise exceptions.HTTPException(status_code=409, detail="Email already exists")
+            else:
+                raise exceptions.HTTPException(status_code=409, detail="Username already exists")
         else:
             try:
                 self.auth_service.sign_up(user_data.email, user_data.password)
             except Exception as e:
-                print(e)
                 self.delete_user(user_data.username)
                 raise exceptions.HTTPException(status_code=500, detail="Firebase Error")
     
