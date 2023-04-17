@@ -1,5 +1,5 @@
 [![codecov](https://codecov.io/gh/taller-II-2023-q1-g8/TemplateFastAPI/branch/master/graph/badge.svg?token=CM3FJKHBQ0)](https://codecov.io/gh/taller-II-2023-q1-g8/TemplateFastAPI)
-![pylint](https://github.com/taller-II-2023-q1-g8/TemplateFastAPI/workflows/pylint.yml/badge.svg)
+[![Pylint](https://github.com/taller-II-2023-q1-g8/TemplateFastAPI/actions/workflows/pylint.yml/badge.svg)](https://github.com/taller-II-2023-q1-g8/TemplateFastAPI/actions/workflows/pylint.yml)
 # Instrucciones
 Con el directorio "template" como CWD:
 > docker-compose up --build
