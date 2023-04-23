@@ -18,6 +18,11 @@ class IUserRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def usernames_starting_with(self, prefix: str) -> list:
+        """Get usernames starting with"""
+        raise NotImplementedError
+
+    @abstractmethod
     def find_by_email(self, email: str) -> Optional[User]:
         """Find a user by email"""
         raise NotImplementedError

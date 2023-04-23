@@ -16,6 +16,12 @@ async def requests_all_usernames():
     """User requests all usernames"""
     return user_service.requests_all_usernames()
 
+@user_routes.get("/starting_with", status_code=200,
+                 response_description="Get usernames matching prefix")
+async def requests_usernames_starting_with(prefix: str):
+    """User requests all usernames"""
+    return user_service.requests_usernames_starting_with(prefix=prefix)
+
 @user_routes.get("/{username}", status_code=200, response_description="Get user by username")
 async def requests_user_with_username(username: str):
     """User requests user with username"""

@@ -15,6 +15,13 @@ class UserTable(IUserRepository):
         session = SessionLocal()
         return list(map(lambda user: user.username, session.query(UserModel).all()))
 
+    def usernames_starting_with(self, prefix: str) -> list:
+        all_usernames = self.all_usernames()
+        return list(filter(
+            lambda username: username.startswith(prefix), all_usernames
+            )
+        )
+
     def find_by_username(self, username: str) -> Optional[User]:
         """Find a user by username"""
         session = SessionLocal()
