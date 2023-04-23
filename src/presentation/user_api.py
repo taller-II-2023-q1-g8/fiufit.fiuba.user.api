@@ -27,6 +27,11 @@ async def requests_user_with_username(username: str):
     """User requests user with username"""
     return user_service.requests_user_with_username(username)
 
+@user_routes.get("/{email}", status_code=200, response_description="Get user by email")
+async def requests_user_with_email(email: str):
+    """User requests user with email"""
+    return user_service.requests_user_with_email(email)
+
 
 @user_routes.put("/", status_code=201, response_description="Create a new user")
 async def wants_to_create_user(user_data: UserSignUpDTO):

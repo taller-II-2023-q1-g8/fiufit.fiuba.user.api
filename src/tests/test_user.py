@@ -40,8 +40,6 @@ class FakeUserRepoAlwaysOk(IUserRepository):
         """Returns an empty list"""
         # pylint: disable=unused-argument
         return []
-    
-    def username_s
 
 class UserRepoAlwaysUsernameUnavailable(FakeUserRepoAlwaysOk):
     """User Repository that always raises an exception when trying\
