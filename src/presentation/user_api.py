@@ -10,12 +10,6 @@ from src.infrastructure.firebase import FirebaseAuthService
 auth_service = FirebaseAuthService() if environ.get("RENDER") is not None \
     else MockAuthService()
 
-if auth_service.isinstance(MockAuthService):
-    print("Using mock auth service")
-else:
-    print("Using Firebase auth service")
-
-
 user_routes = APIRouter(prefix="/user")
 user_repository = UserTable()
 user_service = UserService(user_repository, auth_service) # Application Service
