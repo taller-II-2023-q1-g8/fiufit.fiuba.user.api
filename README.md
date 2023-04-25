@@ -6,7 +6,10 @@ Con el directorio "template" como CWD:
 
 ## Endpoints Implementados:
 - **GET**: localhost:8000/user/
-- **GET**: localhost:8000/user/{user_id}
+- **GET**: localhost:8000/user/?username=
+- **GET**: localhost:8000/user/?email=
+- **GET**: localhost:8000/user/usernames
+- **GET**: localhost:8000/user/usernames?prefix=
 - **PUT**: localhost:8000/user
 - **DELETE**: localhost:8000/user/{user_id}
 - **POST**: localhost:8000/user
