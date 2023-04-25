@@ -1,6 +1,7 @@
 """User API Router"""
 from os import environ
-from fastapi import APIRouter
+from typing import Union
+from fastapi import APIRouter, HTTPException
 from src.infrastructure.auth_service_mock import MockAuthService
 from src.infrastructure.models.user_dto import UserDTO, UserSignUpDTO
 from src.infrastructure.user_repository_postgresql import UserTable
@@ -15,18 +16,29 @@ user_repository = UserTable()
 user_service = UserService(user_repository, auth_service) # Application Service
 
 # Transaction Model
-@user_routes.get("/", status_code=200, response_description="Get usernames list")
-async def requests_all_usernames():
+@user_routes.get("/usernames", status_code=200, response_description="Get usernames list")
+async def requests_all_usernames(prefix: Union[str, None] = None):
     """User requests all usernames"""
-    return user_service.requests_all_usernames()
+    if prefix is not None:
+        return user_service.requests_usernames_starting_with(prefix)
+    else:
+        return user_service.requests_all_usernames()
 
-@user_routes.get("/starting_with", status_code=200,
-                 response_description="Get usernames matching prefix")
-async def requests_usernames_starting_with(prefix: str):
-    """User requests all usernames"""
-    return user_service.requests_usernames_starting_with(prefix=prefix)
+@user_routes.get("/", status_code=200,
+                 response_description="Get users matching conditions")
+async def requests_user_matching(
+    username: Union[str, None] = None,
+    email: Union[str, None] = None):
+    
+    """Queries users"""
+    if username is not None:
+        return user_service.requests_user_with_username(username)
+    if email is not None:
+        return user_service.requests_user_with_email(email)
+    else:
+        raise HTTPException(status_code=400, detail="No query parameters provided")
 
-@user_routes.get("/{username}", status_code=200, response_description="Get user by username")
+@user_routes.get("/", status_code=200, response_description="Get user by username")
 async def requests_user_with_username(username: str):
     """User requests user with username"""
     return user_service.requests_user_with_username(username)
