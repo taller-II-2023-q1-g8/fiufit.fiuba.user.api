@@ -15,9 +15,17 @@ class UserService():
         """User requests all usernames"""
         return self.user_repository.all_usernames()
 
+    def requests_usernames_starting_with(self, prefix: str):
+        """User requests usernames starting with"""
+        return self.user_repository.usernames_starting_with(prefix=prefix)
+
     def requests_user_with_username(self, username: str):
         """User requests user with username"""
         return self.user_repository.find_by_username(username)
+
+    def requests_user_with_email(self, email: str):
+        """User requests user with email"""
+        return self.user_repository.find_by_email(email)
 
     def wants_to_create_user(self, user_data: UserSignUpDTO):
         """User wants to create a new user"""

@@ -13,6 +13,11 @@ class FakeUserRepoAlwaysOk(IUserRepository):
         # pylint: disable=unused-argument
         return None
 
+    def usernames_starting_with(self, prefix: str):
+        """Returns None"""
+        # pylint: disable=unused-argument
+        return None
+    
     def find_by_email(self, email):
         """Returns None"""
         # pylint: disable=unused-argument
