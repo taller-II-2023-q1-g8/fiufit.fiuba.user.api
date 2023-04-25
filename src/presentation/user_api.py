@@ -37,7 +37,7 @@ async def requests_user_with_username(username: str):
     """User requests user with username"""
     return user_service.requests_user_with_username(username)
 
-@user_routes.get("/{email}", status_code=200, response_description="Get user by email")
+@user_routes.get("/with_email/{email}", status_code=200, response_description="Get user by email")
 async def requests_user_with_email(email: str):
     """User requests user with email"""
     return user_service.requests_user_with_email(email)
