@@ -1,14 +1,24 @@
 """User API Router"""
+from os import environ
 from fastapi import APIRouter
+from src.infrastructure.auth_service_mock import MockAuthService
 from src.infrastructure.models.user_dto import UserDTO, UserSignUpDTO
 from src.infrastructure.user_repository_postgresql import UserTable
 from src.usecase.user import UserService
-from src.infrastructure import firebase
+from src.infrastructure.firebase import FirebaseAuthService
+
+auth_service = FirebaseAuthService() if environ.get("RENDER") is not None \
+    else MockAuthService()
+
+if auth_service.isinstance(MockAuthService):
+    print("Using mock auth service")
+else:
+    print("Using Firebase auth service")
 
 
 user_routes = APIRouter(prefix="/user")
 user_repository = UserTable()
-user_service = UserService(user_repository, firebase) #Application Layer User Service
+user_service = UserService(user_repository, auth_service) # Application Service
 
 # Transaction Model
 @user_routes.get("/", status_code=200, response_description="Get usernames list")
