@@ -38,7 +38,7 @@ class UserService():
             else:
                 raise exceptions.HTTPException(status_code=409,
                     detail="Username already exists") from exc
-        else:
+        if not user_data.is_federated:
             try:
                 self.auth_service.sign_up(user_data.email, user_data.password)
             except Exception as exc:
