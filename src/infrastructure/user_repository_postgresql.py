@@ -41,7 +41,11 @@ class UserTable(IUserRepository):
             email=user_data.email,
             phone_number=user_data.phone_number,
             gender=user_data.gender,
-            birth_date=user_data.birth_date))
+            birth_date=user_data.birth_date,
+            is_federated=user_data.is_federated,
+            weight_in_kg=user_data.weight_in_kg,
+            height_in_cm=user_data.height_in_cm,
+            ))
         session.commit()
 
     def delete(self, username: str):
@@ -63,4 +67,7 @@ class UserTable(IUserRepository):
         user_to_update.phone_number = user_data.phone_number
         user_to_update.gender = user_data.gender
         user_to_update.birth_date = user_data.birth_date
+        user_to_update.is_federated = user_data.is_federated,
+        user_to_update.weight_in_kg = user_data.weight_in_kg,
+        user_to_update.height_in_cm = user_data.height_in_cm,
         session.commit()
