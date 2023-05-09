@@ -38,6 +38,7 @@ class UserTable(IUserRepository):
         session.add(UserModel(
             username=user_data.username,
             firstname=user_data.firstname,
+            lastname=user_data.lastname,
             email=user_data.email,
             phone_number=user_data.phone_number,
             gender=user_data.gender,
@@ -63,11 +64,12 @@ class UserTable(IUserRepository):
             .first()
         user_to_update.username = user_data.username
         user_to_update.firstname = user_data.firstname
+        user_to_update.lastname = user_data.lastname
         user_to_update.email = user_data.email
         user_to_update.phone_number = user_data.phone_number
         user_to_update.gender = user_data.gender
         user_to_update.birth_date = user_data.birth_date
-        user_to_update.is_federated = user_data.is_federated,
-        user_to_update.weight_in_kg = user_data.weight_in_kg,
-        user_to_update.height_in_cm = user_data.height_in_cm,
+        user_to_update.is_federated = user_data.is_federated
+        user_to_update.weight_in_kg = user_data.weight_in_kg
+        user_to_update.height_in_cm = user_data.height_in_cm
         session.commit()
