@@ -13,6 +13,11 @@ class IUserRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def all(self) -> list:
+        """Get all users"""
+        raise NotImplementedError
+
+    @abstractmethod
     def all_usernames(self) -> list:
         """Get all usernames"""
         raise NotImplementedError

@@ -11,6 +11,10 @@ class UserService():
         self.auth_service = auth_service
 
     #Transaction Model
+    def requests_all_users(self):
+        """User requests all users"""
+        return self.user_repository.all()
+
     def requests_all_usernames(self):
         """User requests all usernames"""
         return self.user_repository.all_usernames()
@@ -46,7 +50,7 @@ class UserService():
                 raise exceptions.HTTPException(status_code=500,
                     detail="Firebase Error") from exc
             
-    def wants_to_create_user(self, user_data: UserSignUpDTO):
+    def wants_to_create_admin(self, user_data: UserSignUpDTO):
         """User wants to create a new user"""
         try:
             self.user_repository.create(user_data=user_data)

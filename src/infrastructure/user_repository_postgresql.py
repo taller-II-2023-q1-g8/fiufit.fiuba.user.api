@@ -10,6 +10,11 @@ from src.domain.user.user import User
 class UserTable(IUserRepository):
     """Repository Definition"""
 
+    def all(self) -> list:
+        """Get all users"""
+        session = SessionLocal()
+        return session.query(UserModel).all()
+
     def all_usernames(self):
         """Get all usernames"""
         session = SessionLocal()

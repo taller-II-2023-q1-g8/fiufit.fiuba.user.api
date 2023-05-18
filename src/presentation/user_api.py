@@ -36,12 +36,7 @@ async def requests_user_matching(
     if email is not None:
         return user_service.requests_user_with_email(email)
     else:
-        raise HTTPException(status_code=400, detail="No query parameters provided")
-
-@user_routes.get("/", status_code=200, response_description="Get user by username")
-async def requests_user_with_username(username: str):
-    """User requests user with username"""
-    return user_service.requests_user_with_username(username)
+        return user_service.requests_all_users()
 
 @user_routes.get("/with_email/{email}", status_code=200, response_description="Get user by email")
 async def requests_user_with_email(email: str):
