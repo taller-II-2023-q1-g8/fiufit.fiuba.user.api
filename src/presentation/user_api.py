@@ -43,7 +43,6 @@ async def requests_user_with_email(email: str):
     """User requests user with email"""
     return user_service.requests_user_with_email(email)
 
-
 @user_routes.put("/", status_code=201, response_description="Create a new user")
 async def wants_to_create_user(user_data: UserSignUpDTO):
     """User wants to create a new user"""
@@ -65,3 +64,19 @@ async def wants_to_delete_user(username: str):
 async def wants_to_update_user(user_data: UserDTO):
     """User wants to update an user"""
     return user_service.wants_to_update_user(user_data)
+
+@user_routes.post("/follow/{follower_username}/{followed_username}", status_code=200, response_description="Follow a user")
+async def wants_to_follow_user(follower_username: str, followed_username: str):
+    """User wants to follow a user"""
+    return user_service.wants_to_follow_user(follower_username, followed_username)
+
+@user_routes.delete("/follow/{follower_username}/{followed_username}", status_code=200, response_description="Unfollow a user")
+async def wants_to_follow_user(follower_username: str, followed_username: str):
+    """User wants to follow a user"""
+    return user_service.wants_to_unfollow_user(follower_username, followed_username)
+
+
+@user_routes.get("/followed/{username}", status_code=200, response_description="Get followed users")
+async def requests_followed_users(username: str):
+    """User requests followed users"""
+    return user_service.requests_followed_users(username)
