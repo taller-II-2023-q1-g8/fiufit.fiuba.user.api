@@ -16,6 +16,7 @@ class UserModel(Base):
     weight_in_kg = Column(Numeric(5, 2))
     height_in_cm = Column(Numeric(4, 1))
     is_federated = Column(Boolean)
+    is_admin = Column(Boolean)
 
 
 Base.metadata.create_all(bind=engine)

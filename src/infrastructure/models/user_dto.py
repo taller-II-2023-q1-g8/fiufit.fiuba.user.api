@@ -15,6 +15,7 @@ class UserDTO(BaseModel):
     weight_in_kg: float
     height_in_cm: float
     is_federated: bool
+    is_admin: bool
 
 class UserSignUpDTO(BaseModel):
     """User Data Transfer Object for Sign Up """
@@ -29,3 +30,4 @@ class UserSignUpDTO(BaseModel):
     weight_in_kg: float
     height_in_cm: float
     is_federated: bool
+    is_admin: bool

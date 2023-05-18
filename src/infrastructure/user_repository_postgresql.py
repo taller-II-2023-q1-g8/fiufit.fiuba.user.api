@@ -46,6 +46,7 @@ class UserTable(IUserRepository):
             is_federated=user_data.is_federated,
             weight_in_kg=user_data.weight_in_kg,
             height_in_cm=user_data.height_in_cm,
+            is_admin=user_data.is_admin
             ))
         session.commit()
 
@@ -72,4 +73,5 @@ class UserTable(IUserRepository):
         user_to_update.is_federated = user_data.is_federated
         user_to_update.weight_in_kg = user_data.weight_in_kg
         user_to_update.height_in_cm = user_data.height_in_cm
+        user_to_update.is_admin=user_data.is_admin
         session.commit()

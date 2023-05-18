@@ -54,6 +54,11 @@ async def wants_to_create_user(user_data: UserSignUpDTO):
     """User wants to create a new user"""
     return user_service.wants_to_create_user(user_data)
 
+@user_routes.put("/admin", status_code=201, response_description="Create a new admin")
+async def wants_to_create_admin(user_data: UserSignUpDTO):
+    """User wants to create a new user"""
+    return user_service.wants_to_create_admin(user_data)
+
 
 @user_routes.delete("/{username}", status_code=204, response_description="Delete user by username")
 async def wants_to_delete_user(username: str):

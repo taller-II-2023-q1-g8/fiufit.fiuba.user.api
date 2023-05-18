@@ -45,6 +45,26 @@ class UserService():
                 self.user_repository.delete(user_data.username)
                 raise exceptions.HTTPException(status_code=500,
                     detail="Firebase Error") from exc
+            
+    def wants_to_create_user(self, user_data: UserSignUpDTO):
+        """User wants to create a new user"""
+        try:
+            self.user_repository.create(user_data=user_data)
+        except Exception as exc:
+            if self.user_repository.find_by_email(user_data.email) is not None:
+                raise exceptions.HTTPException(status_code=409,
+                    detail="Email already exists") from exc
+            else:
+                raise exceptions.HTTPException(status_code=409,
+                    detail="Username already exists") from exc
+        if not user_data.is_federated:
+            try:
+                self.auth_service.sign_up(user_data.email, user_data.password)
+            except Exception as exc:
+                self.user_repository.delete(user_data.username)
+                raise exceptions.HTTPException(status_code=500,
+                    detail="Firebase Error") from exc
+
 
     def wants_to_delete_user(self, username: str):
         """User wants to delete a user"""
