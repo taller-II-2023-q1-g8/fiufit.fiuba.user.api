@@ -82,6 +82,6 @@ async def requests_followed_users(username: str):
     return user_service.requests_followed_users(username)
 
 @user_routes.get("/follower/{username}", status_code=200, response_description="Get follower users")
-async def requests_followed_users(username: str):
+async def requests_follower_users(username: str):
     """User requests follower users"""
     return user_service.requests_follower_users(username)
