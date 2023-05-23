@@ -103,3 +103,11 @@ class UserService():
             .filter(FollowModel.follower_username == username).all()
         
         return list(map(lambda follow: follow.followed_username, query_resuls))
+
+    def requests_follower_users(self, username: str):
+        """User requests followed users"""
+        session = SessionLocal()
+        query_resuls = session.query(FollowModel) \
+            .filter(FollowModel.followed_username == username).all()
+
+        return list(map(lambda follow: follow.follower_username, query_resuls))

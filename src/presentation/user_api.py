@@ -71,7 +71,7 @@ async def wants_to_follow_user(follower_username: str, followed_username: str):
     return user_service.wants_to_follow_user(follower_username, followed_username)
 
 @user_routes.delete("/follow/{follower_username}/{followed_username}", status_code=200, response_description="Unfollow a user")
-async def wants_to_follow_user(follower_username: str, followed_username: str):
+async def wants_to_unfollow_user(follower_username: str, followed_username: str):
     """User wants to follow a user"""
     return user_service.wants_to_unfollow_user(follower_username, followed_username)
 
@@ -80,3 +80,8 @@ async def wants_to_follow_user(follower_username: str, followed_username: str):
 async def requests_followed_users(username: str):
     """User requests followed users"""
     return user_service.requests_followed_users(username)
+
+@user_routes.get("/follower/{username}", status_code=200, response_description="Get follower users")
+async def requests_followed_users(username: str):
+    """User requests follower users"""
+    return user_service.requests_follower_users(username)
