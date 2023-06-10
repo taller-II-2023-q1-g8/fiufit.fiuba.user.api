@@ -10,32 +10,76 @@ from src.domain.user.user import User
 class UserTable(IUserRepository):
     """Repository Definition"""
 
-    def all(self) -> list:
-        """Get all users"""
+    def all_non_admin(self) -> list:
+        """Get all non-admin users"""
         session = SessionLocal()
-        return session.query(UserModel).all()
+        return session.query(UserModel).filter(UserModel.is_admin == False).all()
 
-    def all_usernames(self):
-        """Get all usernames"""
+    def all_admins(self) -> list:
+        """Get all admin users"""
         session = SessionLocal()
-        return list(map(lambda user: user.username, session.query(UserModel).all()))
+        return session.query(UserModel).filter(UserModel.is_admin == True).all()
 
-    def usernames_starting_with(self, prefix: str) -> list:
-        all_usernames = self.all_usernames()
+    def all_non_admin_usernames(self):
+        """Get all non-admin usernames"""
+        session = SessionLocal()
+        admin = session.query(UserModel).filter(UserModel.is_admin == False).all()
+        return list(map(lambda user: user.username, admin))
+
+    def all_admin_usernames(self):
+        """Get all admin usernames"""
+        session = SessionLocal()
+        admin = session.query(UserModel).filter(UserModel.is_admin == True).all()
+        return list(map(lambda user: user.username, admin))
+
+    def non_admin_usernames_starting_with(self, prefix: str) -> list:
+        """Get non-admin usernames starting with"""
+        all_usernames = self.all_non_admin_usernames()
         return list(filter(
             lambda username: username.startswith(prefix), all_usernames
             )
         )
 
-    def find_by_username(self, username: str) -> Optional[User]:
+    def admin_usernames_starting_with(self, prefix: str) -> list:
+        """Get admin usernames starting with"""
+        all_usernames = self.all_admin_usernames()
+        return list(filter(
+            lambda username: username.startswith(prefix), all_usernames
+            )
+        )
+
+    def find_non_admin_by_username(self, username: str) -> Optional[User]:
         """Find a user by username"""
         session = SessionLocal()
-        return session.query(UserModel).filter(UserModel.username == username).first()
+        return session.query(UserModel)\
+            .filter(UserModel.username == username)\
+            .filter(UserModel.is_admin == False)\
+            .first()
 
-    def find_by_email(self, email: str) -> Optional[User]:
+    def find_non_admin_by_email(self, email: str) -> Optional[User]:
         """Find a user by email"""
         session = SessionLocal()
-        return session.query(UserModel).filter(UserModel.email == email).first()
+        return session.query(UserModel)\
+            .filter(UserModel.email == email)\
+            .filter(UserModel.is_admin == False)\
+            .first()
+
+    
+    def find_admin_by_username(self, username: str) -> Optional[User]:
+        """Find a user by username"""
+        session = SessionLocal()
+        return session.query(UserModel)\
+            .filter(UserModel.username == username)\
+            .filter(UserModel.is_admin == True)\
+            .first()
+
+    def find_admin_by_email(self, email: str) -> Optional[User]:
+        """Find a user by email"""
+        session = SessionLocal()
+        return session.query(UserModel)\
+            .filter(UserModel.email == email)\
+            .filter(UserModel.is_admin == True)\
+            .first()
 
     def create(self, user_data: UserSignUpDTO) -> Optional[User]:
         """Create a new user"""

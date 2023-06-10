@@ -13,27 +13,52 @@ class IUserRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def all(self) -> list:
-        """Get all users"""
+    def all_non_admin(self) -> list:
+        """Get all non-admin users"""
         raise NotImplementedError
 
     @abstractmethod
-    def all_usernames(self) -> list:
-        """Get all usernames"""
+    def all_admins(self) -> list:
+        """Get all admin users"""
         raise NotImplementedError
 
     @abstractmethod
-    def usernames_starting_with(self, prefix: str) -> list:
-        """Get usernames starting with"""
+    def all_non_admin_usernames(self) -> list:
+        """Get all non-admin usernames"""
         raise NotImplementedError
 
     @abstractmethod
-    def find_by_email(self, email: str) -> Optional[User]:
+    def all_admin_usernames(self) -> list:
+        """Get all admin usernames"""
+        raise NotImplementedError
+
+    @abstractmethod
+    def non_admin_usernames_starting_with(self, prefix: str) -> list:
+        """Get non-admin usernames starting with"""
+        raise NotImplementedError
+
+    @abstractmethod
+    def admin_usernames_starting_with(self, prefix: str) -> list:
+        """Get admin usernames starting with"""
+        raise NotImplementedError
+
+    @abstractmethod
+    def find_non_admin_by_email(self, email: str) -> Optional[User]:
         """Find a user by email"""
         raise NotImplementedError
 
     @abstractmethod
-    def find_by_username(self, username: str) -> Optional[User]:
+    def find_non_admin_by_username(self, username: str) -> Optional[User]:
+        """Find a user by username"""
+        raise NotImplementedError
+
+    @abstractmethod
+    def find_admin_by_email(self, email: str) -> Optional[User]:
+        """Find a user by email"""
+        raise NotImplementedError
+
+    @abstractmethod
+    def find_admin_by_username(self, username: str) -> Optional[User]:
         """Find a user by username"""
         raise NotImplementedError
 

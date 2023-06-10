@@ -13,25 +13,45 @@ class UserService():
         self.auth_service = auth_service
 
     #Transaction Model
-    def requests_all_users(self):
-        """User requests all users"""
-        return self.user_repository.all()
+    def requests_all_non_admin_users(self):
+        """User requests all non-admin users"""
+        return self.user_repository.all_non_admin()
+    
+    def requests_all_admin_users(self):
+        """User requests all admin users"""
+        return self.user_repository.all_admins()
 
-    def requests_all_usernames(self):
-        """User requests all usernames"""
-        return self.user_repository.all_usernames()
+    def requests_all_non_admin_usernames(self):
+        """User requests all non-admin usernames"""
+        return self.user_repository.all_non_admin_usernames()
 
-    def requests_usernames_starting_with(self, prefix: str):
-        """User requests usernames starting with"""
-        return self.user_repository.usernames_starting_with(prefix=prefix)
+    def requests_all_admin_usernames(self):
+        """User requests all admin usernames"""
+        return self.user_repository.all_admin_usernames()
 
-    def requests_user_with_username(self, username: str):
+    def requests_non_admin_usernames_starting_with(self, prefix: str):
+        """User requests non-admin usernames starting with"""
+        return self.user_repository.non_admin_usernames_starting_with(prefix=prefix)
+    
+    def requests_admin_usernames_starting_with(self, prefix: str):
+        """User requests admin usernames starting with"""
+        return self.user_repository.admin_usernames_starting_with(prefix=prefix)
+
+    def requests_non_admin_user_with_username(self, username: str):
         """User requests user with username"""
-        return self.user_repository.find_by_username(username)
+        return self.user_repository.find_non_admin_by_username(username)
 
-    def requests_user_with_email(self, email: str):
+    def requests_non_admin_user_with_email(self, email: str):
         """User requests user with email"""
-        return self.user_repository.find_by_email(email)
+        return self.user_repository.find_non_admin_by_email(email)
+
+    def requests_admin_user_with_username(self, username: str):
+        """User requests user with username"""
+        return self.user_repository.find_admin_by_username(username)
+
+    def requests_admin_user_with_email(self, email: str):
+        """User requests user with email"""
+        return self.user_repository.find_admin_by_email(email)
 
     def wants_to_create_user(self, user_data: UserSignUpDTO):
         """User wants to create a new user"""
