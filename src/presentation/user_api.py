@@ -4,6 +4,7 @@ from typing import Union
 from fastapi import APIRouter, HTTPException
 from src.infrastructure.auth_service_mock import MockAuthService
 from src.infrastructure.models.user_dto import UserDTO, UserSignUpDTO
+from src.infrastructure.models.user_device_token_dto import UserDeviceTokenDTO
 from src.infrastructure.user_repository_postgresql import UserTable
 from src.usecase.user import UserService
 from src.infrastructure.firebase import FirebaseAuthService
@@ -76,6 +77,15 @@ async def requests_user_matching(
         return user_service.requests_all_admin_users()
 
 
+@user_routes.put(
+    "/device/{username}", status_code=200, response_description="Update device token"
+)
+async def wants_to_update_device_token(username: str, body: UserDeviceTokenDTO):
+    """User wants to update device token"""
+    print("BODY", body)
+    return user_service.wants_to_update_device_token(username, body.device_token)
+
+
 @user_routes.put("/", status_code=201, response_description="Create a new user")
 async def wants_to_create_user(user_data: UserSignUpDTO):
     """User wants to create a new user"""
@@ -111,7 +121,12 @@ async def wants_to_follow_user(follower_username: str, followed_username: str):
     """User wants to follow a user"""
     return user_service.wants_to_follow_user(follower_username, followed_username)
 
-@user_routes.delete("/follow/{follower_username}/{followed_username}", status_code=200, response_description="Unfollow a user")
+
+@user_routes.delete(
+    "/follow/{follower_username}/{followed_username}",
+    status_code=200,
+    response_description="Unfollow a user",
+)
 async def wants_to_unfollow_user(follower_username: str, followed_username: str):
     """User wants to follow a user"""
     return user_service.wants_to_unfollow_user(follower_username, followed_username)
@@ -124,7 +139,10 @@ async def requests_followed_users(username: str):
     """User requests followed users"""
     return user_service.requests_followed_users(username)
 
-@user_routes.get("/follower/{username}", status_code=200, response_description="Get follower users")
+
+@user_routes.get(
+    "/follower/{username}", status_code=200, response_description="Get follower users"
+)
 async def requests_follower_users(username: str):
     """User requests follower users"""
     return user_service.requests_follower_users(username)
