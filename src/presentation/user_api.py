@@ -82,8 +82,14 @@ async def requests_user_matching(
 )
 async def wants_to_update_device_token(username: str, body: UserDeviceTokenDTO):
     """User wants to update device token"""
-    print("BODY", body)
     return user_service.wants_to_update_device_token(username, body.device_token)
+
+@user_routes.get(
+    "/device/{username}", status_code=200, response_description="Get device token for user"
+)
+async def requests_user_device_token(username: str):
+    """User wants to update device token"""
+    return user_service.requests_device_token_for_user(username)
 
 
 @user_routes.put("/", status_code=201, response_description="Create a new user")

@@ -178,3 +178,19 @@ class UserService:
             table_entry.device_token = device_token
             print(table_entry.device_token)
         session.commit()
+
+    def requests_device_token_for_user(self, username: str):
+        """User requests a user's device token"""
+        if username not in self.user_repository.all_non_admin_usernames():
+            raise exceptions.HTTPException(status_code=404, detail="User not found")
+
+        session = SessionLocal()
+        table_entry = (
+            session.query(UserDeviceToken)
+            .filter(UserDeviceToken.username == username)
+            .first()
+        )
+        if table_entry is None:
+            raise exceptions.HTTPException(status_code=404, detail="Token not found")
+        
+        return table_entry.device_token
