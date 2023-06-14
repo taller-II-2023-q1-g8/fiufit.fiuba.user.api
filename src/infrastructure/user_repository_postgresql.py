@@ -1,4 +1,5 @@
 """User Repository Implementation for PostgreSQL"""
+import datetime
 from typing import Optional
 from src.domain.user.user_repository import IUserRepository
 from src.infrastructure.database import SessionLocal
@@ -85,6 +86,9 @@ class UserTable(IUserRepository):
         """Create a new user"""
         session = SessionLocal()
         session.add(UserModel(
+            created_at=datetime.datetime.now(),
+            updated_at=datetime.datetime.now(),
+            last_login=None,
             username=user_data.username,
             firstname=user_data.firstname,
             lastname=user_data.lastname,
@@ -112,6 +116,7 @@ class UserTable(IUserRepository):
         user_to_update = session.query(UserModel)\
             .filter(UserModel.username == user_data.username)\
             .first()
+        user_to_update.updated_at = datetime.datetime.now()
         user_to_update.username = user_data.username
         user_to_update.firstname = user_data.firstname
         user_to_update.lastname = user_data.lastname

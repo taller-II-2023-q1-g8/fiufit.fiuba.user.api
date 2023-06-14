@@ -3,7 +3,7 @@ from os import environ
 from typing import Union
 from fastapi import APIRouter, HTTPException
 from src.infrastructure.auth_service_mock import MockAuthService
-from src.infrastructure.models.user_dto import UserDTO, UserSignUpDTO
+from src.infrastructure.models.user_dto import UserDTO, UserSignUpDTO, UpdateUserDTO
 from src.infrastructure.models.user_device_token_dto import UserDeviceTokenDTO
 from src.infrastructure.user_repository_postgresql import UserTable
 from src.usecase.user import UserService
@@ -78,6 +78,13 @@ async def requests_user_matching(
 
 
 @user_routes.put(
+    "/login/{username}", status_code=200, response_description="Update last login"
+)
+async def wants_to_update_last_login(username: str):
+    """User wants to update last login time"""
+    return user_service.wants_to_update_last_login(username)
+
+@user_routes.put(
     "/device/{username}", status_code=200, response_description="Update device token"
 )
 async def wants_to_update_device_token(username: str, body: UserDeviceTokenDTO):
@@ -112,8 +119,8 @@ async def wants_to_delete_user(username: str):
     return user_service.wants_to_delete_user(username)
 
 
-@user_routes.post("/", status_code=204, response_description="Update an user")
-async def wants_to_update_user(user_data: UserDTO):
+@user_routes.post("/", status_code=200, response_description="Update an user")
+async def wants_to_update_user(user_data: UpdateUserDTO):
     """User wants to update an user"""
     return user_service.wants_to_update_user(user_data)
 

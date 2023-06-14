@@ -1,7 +1,9 @@
 """Application Service for Users"""
+import datetime
 from fastapi import exceptions
 from src.domain.user.user_repository import IUserRepository
 from src.infrastructure.models.follow import FollowModel
+from src.infrastructure.models.user import UserModel
 from src.infrastructure.models.user_dto import UserDTO, UserSignUpDTO
 from src.infrastructure.models.user_device import UserDeviceToken
 from src.infrastructure.database import SessionLocal
@@ -177,6 +179,20 @@ class UserService:
             print("Isn't None")
             table_entry.device_token = device_token
             print(table_entry.device_token)
+        session.commit()
+
+    def wants_to_update_last_login(self, username: str):
+        """User wants to update last login time"""
+        if username not in self.user_repository.all_non_admin_usernames():
+            raise exceptions.HTTPException(status_code=404, detail="User not found")
+
+        session = SessionLocal()
+        table_entry = (
+            session.query(UserModel)
+            .filter(UserModel.username == username)
+            .first()
+        )
+        table_entry.last_login = datetime.datetime.now()
         session.commit()
 
     def requests_device_token_for_user(self, username: str):

@@ -5,7 +5,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 
-SQLALCHEMY_DATABASE_URL = "postgresql://user:password@postgres/db"
+# SQLALCHEMY_DATABASE_URL = "postgresql://user:password@users-db/db"
+SQLALCHEMY_DATABASE_URL = environ.get("DATABASE_URL")
+# SQLALCHEMY_DATABASE_URL = "postgresql://users_xihj_user:pDcOCsNjoPaOfTAnd7FUG0YlMqGvY4Mp@dpg-cgsp9f1jvhtrd270hlh0-a.oregon-postgres.render.com/users_xihj"
 
 try:
     if environ.get("DATABASE_URL") is not None:
