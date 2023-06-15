@@ -273,3 +273,15 @@ class UserService:
         if table_entry is not None:
             session.delete(table_entry)
             session.commit()
+
+    def wants_to_increment_password_changes(self, username: str):
+        """Wants to increment password changes"""
+        session = SessionLocal()
+        table_entry = (
+            session.query(UserModel).filter(UserModel.username == username).first()
+        )
+        if table_entry is None:
+            raise exceptions.HTTPException(status_code=404, detail="User not found")
+        
+        table_entry.password_changes += 1
+        session.commit()

@@ -88,6 +88,7 @@ class UserTable(IUserRepository):
         session.add(UserModel(
             created_at=datetime.datetime.now(),
             updated_at=datetime.datetime.now(),
+            password_changes=0,
             last_login=None,
             username=user_data.username,
             firstname=user_data.firstname,

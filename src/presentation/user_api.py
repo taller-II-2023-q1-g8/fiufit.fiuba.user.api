@@ -189,3 +189,10 @@ async def wants_to_block_user(username: str, admin_username: str):
 async def wants_to_unblock_user(username: str):
     """User wants to unblock user"""
     return user_service.wants_to_unblock_user(username)
+
+@user_routes.post(
+    "/changed-password/{username}", status_code=200, response_description="Pssword changes incremented"
+)
+async def wants_to_increment_password_changes(username: str):
+    """User wants to increment password changes"""
+    return user_service.wants_to_increment_password_changes(username)

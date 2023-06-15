@@ -1,5 +1,5 @@
 """User Model for ORM"""
-from sqlalchemy import Column, String, Date, Numeric, Boolean, DateTime
+from sqlalchemy import Column, String, Date, Numeric, Boolean, DateTime, Integer
 from src.infrastructure.database import Base, engine
 
 
@@ -20,6 +20,7 @@ class UserModel(Base):
     last_login = Column(DateTime)
     is_federated = Column(Boolean)
     is_admin = Column(Boolean)
+    password_changes = Column(Integer)
 
 
 Base.metadata.create_all(bind=engine)
