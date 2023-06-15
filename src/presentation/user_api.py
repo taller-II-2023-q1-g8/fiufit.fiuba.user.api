@@ -84,6 +84,7 @@ async def wants_to_update_last_login(username: str):
     """User wants to update last login time"""
     return user_service.wants_to_update_last_login(username)
 
+
 @user_routes.put(
     "/device/{username}", status_code=200, response_description="Update device token"
 )
@@ -91,8 +92,11 @@ async def wants_to_update_device_token(username: str, body: UserDeviceTokenDTO):
     """User wants to update device token"""
     return user_service.wants_to_update_device_token(username, body.device_token)
 
+
 @user_routes.get(
-    "/device/{username}", status_code=200, response_description="Get device token for user"
+    "/device/{username}",
+    status_code=200,
+    response_description="Get device token for user",
 )
 async def requests_user_device_token(username: str):
     """User wants to update device token"""
@@ -159,3 +163,29 @@ async def requests_followed_users(username: str):
 async def requests_follower_users(username: str):
     """User requests follower users"""
     return user_service.requests_follower_users(username)
+
+
+@user_routes.get(
+    "/blocked/{username}", status_code=200, response_description="Get follower users"
+)
+async def asks_if_user_is_blocked(username: str):
+    """User asks if user is blocked"""
+    return user_service.asks_if_user_is_blocked(username)
+
+
+@user_routes.post(
+    "/block/{username}/{admin_username}",
+    status_code=200,
+    response_description="Block user",
+)
+async def wants_to_block_user(username: str, admin_username: str):
+    """User wants to block user"""
+    return user_service.wants_to_block_user(username, admin_username)
+
+
+@user_routes.post(
+    "/unblock/{username}", status_code=200, response_description="Unblock user"
+)
+async def wants_to_unblock_user(username: str):
+    """User wants to unblock user"""
+    return user_service.wants_to_unblock_user(username)

@@ -2,6 +2,7 @@
 import datetime
 from fastapi import exceptions
 from src.domain.user.user_repository import IUserRepository
+from src.infrastructure.models.blocked_user import BlockedUserModel
 from src.infrastructure.models.follow import FollowModel
 from src.infrastructure.models.user import UserModel
 from src.infrastructure.models.user_dto import UserDTO, UserSignUpDTO
@@ -190,9 +191,7 @@ class UserService:
 
         session = SessionLocal()
         table_entry = (
-            session.query(UserModel)
-            .filter(UserModel.username == username)
-            .first()
+            session.query(UserModel).filter(UserModel.username == username).first()
         )
         table_entry.last_login = datetime.datetime.now()
         session.commit()
@@ -210,5 +209,67 @@ class UserService:
         )
         if table_entry is None:
             raise exceptions.HTTPException(status_code=404, detail="Token not found")
-        
+
         return table_entry.device_token
+
+    def asks_if_user_is_blocked(self, username: str):
+        """User asks if a user is blocked"""
+        if username not in self.user_repository.all_non_admin_usernames():
+            raise exceptions.HTTPException(status_code=404, detail="User not found")
+
+        session = SessionLocal()
+        table_entry = (
+            session.query(BlockedUserModel)
+            .filter(BlockedUserModel.blocked_user == username)
+            .first()
+        )
+
+        if table_entry is None:
+            return {"blocked": False}
+        else:
+            return {
+                "blocked": True,
+                "blocked_user": table_entry.blocked_user,
+                "blocked_by": table_entry.blocked_by,
+                "when": table_entry.created_at,
+            }
+
+    def wants_to_block_user(self, user_to_block: str, admin_username: str):
+        """Wants to block a user"""
+
+        if admin_username not in self.user_repository.all_admin_usernames():
+            raise exceptions.HTTPException(
+                status_code=403, detail="You don't have enough permissions"
+            )
+
+        if user_to_block not in self.user_repository.all_non_admin_usernames():
+            raise exceptions.HTTPException(status_code=404, detail="User not found")
+
+        session = SessionLocal()
+        table_entry = (
+            session.query(BlockedUserModel)
+            .filter(BlockedUserModel.blocked_user == user_to_block)
+            .first()
+        )
+
+        if table_entry is None:
+            table_entry = BlockedUserModel()
+            table_entry.blocked_user = user_to_block
+            table_entry.blocked_by = admin_username
+            table_entry.created_at = datetime.datetime.now()
+            session.add(table_entry)
+            session.commit()
+
+    def wants_to_unblock_user(self, user_to_unblock: str):
+        """Wants to unblock a user"""
+
+        session = SessionLocal()
+        table_entry = (
+            session.query(BlockedUserModel)
+            .filter(BlockedUserModel.blocked_user == user_to_unblock)
+            .first()
+        )
+
+        if table_entry is not None:
+            session.delete(table_entry)
+            session.commit()
