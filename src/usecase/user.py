@@ -62,7 +62,9 @@ class UserService:
         try:
             self.user_repository.create(user_data=user_data)
         except Exception as exc:
-            if self.user_repository.find_by_email(user_data.email) is not None:
+            admin = self.user_repository.find_admin_by_email(user_data.email)
+            non_admin = self.user_repository.find_non_admin_by_email(user_data.email)
+            if admin is not None or non_admin is not None:
                 raise exceptions.HTTPException(
                     status_code=409, detail="Email already exists"
                 ) from exc
@@ -81,8 +83,8 @@ class UserService:
 
     def wants_to_follow_user(self, follower_username: str, followed_username: str):
         session = SessionLocal()
-        follower = self.user_repository.find_by_username(follower_username)
-        followed = self.user_repository.find_by_username(followed_username)
+        follower = self.user_repository.find_non_admin_by_username(follower_username)
+        followed = self.user_repository.find_non_admin_by_username(followed_username)
 
         if (follower is not None) and (followed is not None):
             if (
