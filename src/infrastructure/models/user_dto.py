@@ -20,6 +20,8 @@ class UserDTO(BaseModel):
     updated_at: datetime.datetime
     last_login: datetime.datetime
     password_changes: int
+    longitude: float
+    latitude: float
 
 class UserSignUpDTO(BaseModel):
     """User Data Transfer Object for Sign Up """

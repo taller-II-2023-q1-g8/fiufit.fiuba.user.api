@@ -3,6 +3,7 @@ from os import environ
 from typing import Union
 from fastapi import APIRouter, HTTPException
 from src.infrastructure.auth_service_mock import MockAuthService
+from src.infrastructure.models.coordinates import Coordinates
 from src.infrastructure.models.user_dto import UserDTO, UserSignUpDTO, UpdateUserDTO
 from src.infrastructure.models.user_device_token_dto import UserDeviceTokenDTO
 from src.infrastructure.user_repository_postgresql import UserTable
@@ -191,8 +192,15 @@ async def wants_to_unblock_user(username: str):
     return user_service.wants_to_unblock_user(username)
 
 @user_routes.post(
-    "/changed-password/{username}", status_code=200, response_description="Pssword changes incremented"
+    "/changed-password/{username}", status_code=200, response_description="Password changes incremented"
 )
 async def wants_to_increment_password_changes(username: str):
     """User wants to increment password changes"""
     return user_service.wants_to_increment_password_changes(username)
+
+@user_routes.put(
+    "/coordinates/{username}", status_code=200, response_description="Update user coordinates"
+)
+async def wants_to_update_user_coordinates(username: str, coordinates: Coordinates):
+    """User wants to update his coordinates"""
+    return user_service.wants_to_update_coordinates(username, coordinates)

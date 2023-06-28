@@ -21,6 +21,7 @@ class UserModel(Base):
     is_federated = Column(Boolean)
     is_admin = Column(Boolean)
     password_changes = Column(Integer)
-
+    longitude = Column(Numeric(10, 7))
+    latitude = Column(Numeric(10, 7))
 
 Base.metadata.create_all(bind=engine)

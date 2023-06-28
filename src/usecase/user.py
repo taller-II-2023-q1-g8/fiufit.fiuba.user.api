@@ -3,6 +3,7 @@ import datetime
 from fastapi import exceptions
 from src.domain.user.user_repository import IUserRepository
 from src.infrastructure.models.blocked_user import BlockedUserModel
+from src.infrastructure.models.coordinates import Coordinates
 from src.infrastructure.models.follow import FollowModel
 from src.infrastructure.models.user import UserModel
 from src.infrastructure.models.user_dto import UserDTO, UserSignUpDTO
@@ -284,4 +285,17 @@ class UserService:
             raise exceptions.HTTPException(status_code=404, detail="User not found")
         
         table_entry.password_changes += 1
+        session.commit()
+
+    def wants_to_update_coordinates(self, username: str, coordinates: Coordinates):
+        """Wants to update coordinates for username"""
+        session = SessionLocal()
+        table_entry = (
+            session.query(UserModel).filter(UserModel.username == username).first()
+        )
+        if table_entry is None:
+            raise exceptions.HTTPException(status_code=404, detail="User not found")
+        
+        table_entry.longitude = coordinates.longitude
+        table_entry.latitude = coordinates.latitude
         session.commit()
