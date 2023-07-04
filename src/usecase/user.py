@@ -11,12 +11,15 @@ from src.infrastructure.models.user_device import UserDeviceToken
 from src.infrastructure.database import SessionLocal
 
 
+
 class UserService:
     """Application Service for Users Definition"""
+    FOLLOWER_MILESTONES = [10, 50, 100]
 
-    def __init__(self, user_repository: IUserRepository, auth_service):
+    def __init__(self, user_repository: IUserRepository, auth_service, notification_service):
         self.user_repository = user_repository
         self.auth_service = auth_service
+        self.notification_service = notification_service
 
     # Transaction Model
     def requests_all_non_admin_users(self):
@@ -104,6 +107,15 @@ class UserService:
                 )
                 session.commit()
 
+        new_follower_count = len(self.requests_followers_for_user(followed_username))
+
+        if new_follower_count in self.FOLLOWER_MILESTONES:
+            device_token = self.requests_device_token_for_user(followed_username)
+            title = "Hito de Seguidores Alcanzado!"
+            body = f"Haz alcanzado los {new_follower_count} seguidores"
+            
+            self.notification_service.send_notification(device_token, title, body)
+
     def wants_to_unfollow_user(self, follower_username: str, followed_username: str):
         session = SessionLocal()
 
@@ -149,6 +161,17 @@ class UserService:
         )
 
         return list(map(lambda follow: follow.followed_username, query_resuls))
+
+    def requests_followers_for_user(self, username: str):
+        """User requests followers for user"""
+        session = SessionLocal()
+        query_resuls = (
+            session.query(FollowModel)
+            .filter(FollowModel.followed_username == username)
+            .all()
+        )
+
+        return list(map(lambda follow: follow.follower_username, query_resuls))
 
     def requests_follower_users(self, username: str):
         """User requests follower users"""

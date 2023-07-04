@@ -1,8 +1,11 @@
-fastAPI==0.95.0
+fastapi==0.95.0
 uvicorn==0.20.0
 sqlalchemy
 psycopg2-binary
 pytest
 pytest-cov
+# pyrebase
 pydantic
-pyrebase
+google-auth
+requests
+firebase-admin

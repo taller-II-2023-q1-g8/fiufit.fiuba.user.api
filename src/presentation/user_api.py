@@ -6,6 +6,7 @@ from src.infrastructure.auth_service_mock import MockAuthService
 from src.infrastructure.models.coordinates import Coordinates
 from src.infrastructure.models.user_dto import UserDTO, UserSignUpDTO, UpdateUserDTO
 from src.infrastructure.models.user_device_token_dto import UserDeviceTokenDTO
+from src.infrastructure.notification_service import NotificationService
 from src.infrastructure.user_repository_postgresql import UserTable
 from src.usecase.user import UserService
 from src.infrastructure.firebase import FirebaseAuthService
@@ -14,10 +15,12 @@ auth_service = (
     FirebaseAuthService() if environ.get("RENDER") is not None else MockAuthService()
 )
 
+
 user_routes = APIRouter(prefix="/user")
 user_repository = UserTable()
+notification_service = NotificationService()
 user_service: UserService = UserService(
-    user_repository, auth_service
+    user_repository, auth_service, notification_service
 )  # Application Service
 
 

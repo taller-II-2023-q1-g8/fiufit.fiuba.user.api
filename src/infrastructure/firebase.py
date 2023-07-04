@@ -1,5 +1,8 @@
 """Firebase configuration for FIUFIT"""
-import pyrebase
+import firebase_admin
+from firebase_admin import credentials, auth
+
+# import pyrebase
 from src.usecase.authentication_service import IAuthenticationService
 
 firebaseConfig = {
@@ -14,10 +17,16 @@ firebaseConfig = {
 }
 
 
+PRIVATE_KEY_PATH = "/etc/secrets/fiufit-73a11.json"
+
+
 class FirebaseAuthService(IAuthenticationService):
+
     def __init__(self):
-        self.auth = pyrebase.initialize_app(firebaseConfig).auth()
+        # self.auth = pyrebase.initialize_app(firebaseConfig).auth()
+        creds = credentials.Certificate(PRIVATE_KEY_PATH)
+        self.app = firebase_admin.initialize_app(creds, firebaseConfig)
 
     def sign_up(self, email: str, password: str):
         """Sign up a new user in firebase"""
-        self.auth.create_user_with_email_and_password(email, password)
+        return auth.create_user(email=email, password=password)
