@@ -1,0 +1,2 @@
+DATABASE_URL=postgresql://user:password@users-db/db
+SEND_NOTIFICATIONS_URL=https://fcm.googleapis.com/v1/projects/fiufit-73a11/messages:send
