@@ -1,5 +1,6 @@
 """User Model for ORM"""
 from sqlalchemy import Column, String, Date, Numeric, Boolean, DateTime, Integer
+from sqlalchemy.dialects.postgresql import ARRAY
 from src.infrastructure.database import Base, engine
 
 
@@ -23,5 +24,6 @@ class UserModel(Base):
     password_changes = Column(Integer)
     longitude = Column(Numeric(10, 7))
     latitude = Column(Numeric(10, 7))
+    interests = Column(ARRAY(String))
 
 Base.metadata.create_all(bind=engine)

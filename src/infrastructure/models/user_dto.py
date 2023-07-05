@@ -22,6 +22,7 @@ class UserDTO(BaseModel):
     password_changes: int
     longitude: float
     latitude: float
+    interests: list
 
 class UserSignUpDTO(BaseModel):
     """User Data Transfer Object for Sign Up """
@@ -37,6 +38,7 @@ class UserSignUpDTO(BaseModel):
     height_in_cm: float
     is_federated: bool
     is_admin: bool
+    interests: list
 
 class UpdateUserDTO(BaseModel):
     """User Data Transfer Object for Updating """
@@ -51,3 +53,4 @@ class UpdateUserDTO(BaseModel):
     height_in_cm: float
     is_federated: bool
     is_admin: bool
+    interests: list
