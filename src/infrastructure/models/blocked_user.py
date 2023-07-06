@@ -7,4 +7,5 @@ class BlockedUserModel(Base):
     blocked_user =  Column(String, ForeignKey("users.username"), primary_key=True)
     created_at = Column(DateTime)
 
-Base.metadata.create_all(bind=engine)
+if Base is not None and engine is not None:
+    Base.metadata.create_all(bind=engine)

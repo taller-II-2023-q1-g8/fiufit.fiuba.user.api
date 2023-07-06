@@ -6,4 +6,5 @@ class FollowModel(Base):
     follower_username =  Column(String, ForeignKey("users.username"), primary_key=True)
     followed_username =  Column(String, ForeignKey("users.username"), primary_key=True)
 
-Base.metadata.create_all(bind=engine)
+if Base is not None and engine is not None:
+    Base.metadata.create_all(bind=engine)

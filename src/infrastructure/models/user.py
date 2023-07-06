@@ -26,4 +26,5 @@ class UserModel(Base):
     latitude = Column(Numeric(10, 7))
     interests = Column(ARRAY(String))
 
-Base.metadata.create_all(bind=engine)
+if Base is not None and engine is not None:
+    Base.metadata.create_all(bind=engine)

@@ -6,4 +6,5 @@ class UserDeviceToken(Base):
     username = Column(String, ForeignKey("users.username"), primary_key=True)
     device_token = Column(String, unique=True)
 
-Base.metadata.create_all(bind=engine)
+if Base is not None and engine is not None:
+    Base.metadata.create_all(bind=engine)
