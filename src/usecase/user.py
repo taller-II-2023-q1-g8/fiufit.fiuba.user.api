@@ -108,11 +108,7 @@ class UserService:
 # FALTA
     def wants_to_unfollow_user(self, follower_username: str, followed_username: str):
         """User wants to unfollow a user"""
-        follow = self.follow_repository.find_by_pair(
-            follower_username, followed_username
-        )
-        if follow is not None:
-            self.follow_repository.remove(follow)
+        self.follow_repository.remove(follower_username, followed_username)
 
     def wants_to_delete_user(self, username: str):
         """User wants to delete a user"""
@@ -200,9 +196,8 @@ class UserService:
 # FALTA
     def wants_to_unblock_user(self, user_to_unblock: str):
         """Wants to unblock a user"""
-        block = self.block_repository.find_by_blocked_username(user_to_unblock)
-        if block:
-            self.block_repository.remove(user_to_unblock)
+        self.block_repository.remove(user_to_unblock)
+
 
     def wants_to_increment_password_changes(self, username: str):
         """Wants to increment password changes"""

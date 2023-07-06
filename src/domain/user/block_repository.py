@@ -10,7 +10,7 @@ class IBlockRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def remove(self, block: BlockedUserModel) -> None:
+    def remove(self, username: str) -> None:
         """Remove a block"""
         raise NotImplementedError
 

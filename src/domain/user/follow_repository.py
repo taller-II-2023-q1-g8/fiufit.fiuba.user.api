@@ -11,7 +11,7 @@ class IFollowRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def remove(self, follow: FollowModel) -> None:
+    def remove(self, follower: str, following: str) -> None:
         """Remove a user"""
         raise NotImplementedError
 

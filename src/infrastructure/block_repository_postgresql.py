@@ -22,11 +22,17 @@ class BlockRepositoryPostreSQL(IBlockRepository):
         )
         session.commit()
 
-    def remove(self, block: BlockedUserModel) -> None:
+    def remove(self, username: str) -> None:
         """Remove a block"""
         session = self.session()
-        session.delete(block)
-        session.commit()
+        block_to_remove = (
+            session.query(BlockedUserModel)
+            .filter(BlockedUserModel.blocked_user == username)
+            .first()
+        )
+        if block_to_remove:
+            session.delete(block_to_remove)
+            session.commit()
 
     def find_by_blocked_username(self, username: str) -> BlockedUserModel | None:
         """Find a user's followers"""
