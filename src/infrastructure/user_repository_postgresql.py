@@ -147,11 +147,12 @@ class UserTable(IUserRepository):
     def find_by_device_token(self, device_token: str) -> Optional[User]:
         """Get a user by device token"""
         session = self.session()
-        return (
-            session.query(UserDeviceToken)
-            .filter(UserModel.device_token == device_token)
-            .first()
-        )
+        table_entry = (session.query(UserDeviceToken)
+            .filter(UserDeviceToken.device_token == device_token)
+            .first())
+    
+        if table_entry:
+            return self.find_by_username(table_entry.username)
 
     def update_device_token(self, username: str, device_token: str):
         """Update a user's device token"""
