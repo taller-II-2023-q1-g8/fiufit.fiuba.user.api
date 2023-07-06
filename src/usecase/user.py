@@ -11,12 +11,14 @@ from src.infrastructure.models.user_device import UserDeviceToken
 from src.infrastructure.database import SessionLocal
 
 
-
 class UserService:
     """Application Service for Users Definition"""
+
     FOLLOWER_MILESTONES = [10, 50, 100]
 
-    def __init__(self, user_repository: IUserRepository, auth_service, notification_service):
+    def __init__(
+        self, user_repository: IUserRepository, auth_service, notification_service
+    ):
         self.user_repository = user_repository
         self.auth_service = auth_service
         self.notification_service = notification_service
@@ -113,7 +115,7 @@ class UserService:
             device_token = self.requests_device_token_for_user(followed_username)
             title = "Hito de Seguidores Alcanzado!"
             body = f"Haz alcanzado los {new_follower_count} seguidores"
-            
+
             self.notification_service.send_notification(device_token, title, body)
 
     def wants_to_unfollow_user(self, follower_username: str, followed_username: str):
@@ -190,6 +192,14 @@ class UserService:
             raise exceptions.HTTPException(status_code=404, detail="User not found")
 
         session = SessionLocal()
+        old_table_entry = (
+            session.query(UserDeviceToken)
+            .filter(UserDeviceToken.device_token == device_token)
+            .first()
+        )
+
+        session.delete(old_table_entry)
+
         table_entry = (
             session.query(UserDeviceToken)
             .filter(UserDeviceToken.username == username)
@@ -306,7 +316,7 @@ class UserService:
         )
         if table_entry is None:
             raise exceptions.HTTPException(status_code=404, detail="User not found")
-        
+
         table_entry.password_changes += 1
         session.commit()
 
@@ -318,7 +328,7 @@ class UserService:
         )
         if table_entry is None:
             raise exceptions.HTTPException(status_code=404, detail="User not found")
-        
+
         table_entry.longitude = coordinates.longitude
         table_entry.latitude = coordinates.latitude
         session.commit()
