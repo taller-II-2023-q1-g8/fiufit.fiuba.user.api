@@ -148,7 +148,7 @@ _For more examples, please refer to the [Documentation](https://fiufit-usuarios.
 
 Franco Papa - fpapa@fi.uba.ar
 
-Project Link: [https://github.com/taller-II-2023-q1-g8/fiufit.fiuba.user.api](https://github.com/taller-II-2023-q1-g8/fiufit.fiuba.user.api)
+Project Link: [https://github.com/taller-II-2023-q1-g8](https://github.com/taller-II-2023-q1-g8)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
