@@ -1,14 +1,11 @@
 """Application Service for Users"""
 import datetime
 from fastapi import exceptions
+from src.domain.user.block_repository import IBlockRepository
+from src.domain.user.follow_repository import IFollowRepository
 from src.domain.user.user_repository import IUserRepository
-from src.infrastructure.models.blocked_user import BlockedUserModel
 from src.infrastructure.models.coordinates import Coordinates
-from src.infrastructure.models.follow import FollowModel
-from src.infrastructure.models.user import UserModel
-from src.infrastructure.models.user_dto import UserDTO, UserSignUpDTO
-from src.infrastructure.models.user_device import UserDeviceToken
-from src.infrastructure.database import SessionLocal
+from src.infrastructure.models.user_dto import UpdateUserDTO, UserDTO, UserSignUpDTO
 
 
 class UserService:
@@ -17,13 +14,19 @@ class UserService:
     FOLLOWER_MILESTONES = [10, 50, 100]
 
     def __init__(
-        self, user_repository: IUserRepository, auth_service, notification_service
+        self,
+        user_repository: IUserRepository,
+        auth_service,
+        notification_service,
+        follow_repository: IFollowRepository,
+        block_repository: IBlockRepository,
     ):
         self.user_repository = user_repository
         self.auth_service = auth_service
         self.notification_service = notification_service
+        self.follow_repository = follow_repository
+        self.block_repository = block_repository
 
-    # Transaction Model
     def requests_all_non_admin_users(self):
         """User requests all non-admin users"""
         return self.user_repository.all_non_admin()
@@ -87,29 +90,14 @@ class UserService:
                 raise exceptions.HTTPException(
                     status_code=500, detail="Firebase Error"
                 ) from exc
-
+# FALTA
     def wants_to_follow_user(self, follower_username: str, followed_username: str):
-        session = SessionLocal()
-        follower = self.user_repository.find_non_admin_by_username(follower_username)
-        followed = self.user_repository.find_non_admin_by_username(followed_username)
+        """User wants to follow a user"""
+        self.follow_repository.create(follower_username, followed_username)
 
-        if (follower is not None) and (followed is not None):
-            if (
-                session.query(FollowModel)
-                .filter(FollowModel.followed_username == followed_username)
-                .filter(FollowModel.follower_username == follower_username)
-                .first()
-                is None
-            ):
-                session.add(
-                    FollowModel(
-                        follower_username=follower_username,
-                        followed_username=followed_username,
-                    )
-                )
-                session.commit()
-
-        new_follower_count = len(self.requests_followers_for_user(followed_username))
+        new_follower_count = len(
+            self.follow_repository.find_by_following_username(followed_username)
+        )
 
         if new_follower_count in self.FOLLOWER_MILESTONES:
             device_token = self.requests_device_token_for_user(followed_username)
@@ -117,19 +105,14 @@ class UserService:
             body = f"Haz alcanzado los {new_follower_count} seguidores"
 
             self.notification_service.send_notification(device_token, title, body)
-
+# FALTA
     def wants_to_unfollow_user(self, follower_username: str, followed_username: str):
-        session = SessionLocal()
-
-        follow_to_delete = (
-            session.query(FollowModel)
-            .filter(FollowModel.followed_username == followed_username)
-            .filter(FollowModel.follower_username == follower_username)
-            .first()
+        """User wants to unfollow a user"""
+        follow = self.follow_repository.find_by_pair(
+            follower_username, followed_username
         )
-
-        session.delete(follow_to_delete)
-        session.commit()
+        if follow is not None:
+            self.follow_repository.remove(follow)
 
     def wants_to_delete_user(self, username: str):
         """User wants to delete a user"""
@@ -140,134 +123,67 @@ class UserService:
                 status_code=404, detail="user to delete not found"
             ) from exc
 
-    def wants_to_update_user(self, user_data: UserDTO):
+    def wants_to_update_user(self, user_data: UpdateUserDTO):
         """User wants to update an user"""
-        try:
-            self.user_repository.update(user_data)
-        except Exception as exc:
-            raise exceptions.HTTPException(
-                status_code=404, detail="user to update not found"
-            ) from exc
-
-    def wants_to_subscribe_to_training(self, training_id: int):
-        """User wants to subscribe to a training"""
-        raise NotImplementedError
-
+        # try:
+        self.user_repository.update(user_data)
+        # except Exception as exc:
+        #     raise exceptions.HTTPException(
+        #         status_code=404, detail="user to update not found"
+        #     ) from exc
+# FALTA
     def requests_followed_users(self, username: str):
         """User requests followed users"""
-        session = SessionLocal()
-        query_resuls = (
-            session.query(FollowModel)
-            .filter(FollowModel.follower_username == username)
-            .all()
-        )
-
-        return list(map(lambda follow: follow.followed_username, query_resuls))
-
-    def requests_followers_for_user(self, username: str):
-        """User requests followers for user"""
-        session = SessionLocal()
-        query_resuls = (
-            session.query(FollowModel)
-            .filter(FollowModel.followed_username == username)
-            .all()
-        )
-
-        return list(map(lambda follow: follow.follower_username, query_resuls))
-
+        results = self.follow_repository.find_by_follower_username(username)
+        return list(map(lambda follow: follow.followed_username, results))
+# FALTA
     def requests_follower_users(self, username: str):
         """User requests follower users"""
-        session = SessionLocal()
-        query_resuls = (
-            session.query(FollowModel)
-            .filter(FollowModel.followed_username == username)
-            .all()
-        )
-
-        return list(map(lambda follow: follow.follower_username, query_resuls))
+        results = self.follow_repository.find_by_following_username(username)
+        return list(map(lambda follow: follow.follower_username, results))
 
     def wants_to_update_device_token(self, username: str, device_token: str):
         """User wants to update device token"""
         if username not in self.user_repository.all_non_admin_usernames():
             raise exceptions.HTTPException(status_code=404, detail="User not found")
+        
+        user_with_token = self.user_repository.find_by_device_token(device_token)
+        if user_with_token is not None:
+            self.user_repository.remove_user_device_token(user_with_token.username)
 
-        session = SessionLocal()
-        old_table_entry = (
-            session.query(UserDeviceToken)
-            .filter(UserDeviceToken.device_token == device_token)
-            .first()
-        )
-
-        session.delete(old_table_entry)
-
-        table_entry = (
-            session.query(UserDeviceToken)
-            .filter(UserDeviceToken.username == username)
-            .first()
-        )
-        if table_entry is None:
-            print("Is None")
-            table_entry = UserDeviceToken()
-            table_entry.username = username
-            table_entry.device_token = device_token
-            session.add(table_entry)
-            print(table_entry.device_token)
-        else:
-            print("Isn't None")
-            table_entry.device_token = device_token
-            print(table_entry.device_token)
-        session.commit()
+        self.user_repository.update_device_token(username, device_token)
 
     def wants_to_update_last_login(self, username: str):
         """User wants to update last login time"""
-        if username not in self.user_repository.all_non_admin_usernames():
-            raise exceptions.HTTPException(status_code=404, detail="User not found")
-
-        session = SessionLocal()
-        table_entry = (
-            session.query(UserModel).filter(UserModel.username == username).first()
-        )
-        table_entry.last_login = datetime.datetime.now()
-        session.commit()
+        self.user_repository.update_user_last_login(username)
 
     def requests_device_token_for_user(self, username: str):
         """User requests a user's device token"""
         if username not in self.user_repository.all_non_admin_usernames():
             raise exceptions.HTTPException(status_code=404, detail="User not found")
 
-        session = SessionLocal()
-        table_entry = (
-            session.query(UserDeviceToken)
-            .filter(UserDeviceToken.username == username)
-            .first()
-        )
-        if table_entry is None:
+        token = self.user_repository.get_device_token(username)
+        if token is None:
             raise exceptions.HTTPException(status_code=404, detail="Token not found")
-
-        return table_entry.device_token
-
+        return token.device_token
+# FALTA
     def asks_if_user_is_blocked(self, username: str):
         """User asks if a user is blocked"""
         if username not in self.user_repository.all_non_admin_usernames():
             raise exceptions.HTTPException(status_code=404, detail="User not found")
 
-        session = SessionLocal()
-        table_entry = (
-            session.query(BlockedUserModel)
-            .filter(BlockedUserModel.blocked_user == username)
-            .first()
-        )
+        block = self.block_repository.find_by_blocked_username(username)
 
-        if table_entry is None:
+        if block is None:
             return {"blocked": False}
         else:
             return {
                 "blocked": True,
-                "blocked_user": table_entry.blocked_user,
-                "blocked_by": table_entry.blocked_by,
-                "when": table_entry.created_at,
+                "blocked_user": block.blocked_user,
+                "blocked_by": block.blocked_by,
+                "when": block.created_at,
             }
-
+# FALTA
     def wants_to_block_user(self, user_to_block: str, admin_username: str):
         """Wants to block a user"""
 
@@ -279,56 +195,19 @@ class UserService:
         if user_to_block not in self.user_repository.all_non_admin_usernames():
             raise exceptions.HTTPException(status_code=404, detail="User not found")
 
-        session = SessionLocal()
-        table_entry = (
-            session.query(BlockedUserModel)
-            .filter(BlockedUserModel.blocked_user == user_to_block)
-            .first()
-        )
-
-        if table_entry is None:
-            table_entry = BlockedUserModel()
-            table_entry.blocked_user = user_to_block
-            table_entry.blocked_by = admin_username
-            table_entry.created_at = datetime.datetime.now()
-            session.add(table_entry)
-            session.commit()
-
+        if self.block_repository.find_by_blocked_username(user_to_block) is None:
+            self.block_repository.create(user_to_block, admin_username)
+# FALTA
     def wants_to_unblock_user(self, user_to_unblock: str):
         """Wants to unblock a user"""
-
-        session = SessionLocal()
-        table_entry = (
-            session.query(BlockedUserModel)
-            .filter(BlockedUserModel.blocked_user == user_to_unblock)
-            .first()
-        )
-
-        if table_entry is not None:
-            session.delete(table_entry)
-            session.commit()
+        block = self.block_repository.find_by_blocked_username(user_to_unblock)
+        if block:
+            self.block_repository.remove(user_to_unblock)
 
     def wants_to_increment_password_changes(self, username: str):
         """Wants to increment password changes"""
-        session = SessionLocal()
-        table_entry = (
-            session.query(UserModel).filter(UserModel.username == username).first()
-        )
-        if table_entry is None:
-            raise exceptions.HTTPException(status_code=404, detail="User not found")
-
-        table_entry.password_changes += 1
-        session.commit()
+        self.user_repository.increment_password_changes(username)
 
     def wants_to_update_coordinates(self, username: str, coordinates: Coordinates):
         """Wants to update coordinates for username"""
-        session = SessionLocal()
-        table_entry = (
-            session.query(UserModel).filter(UserModel.username == username).first()
-        )
-        if table_entry is None:
-            raise exceptions.HTTPException(status_code=404, detail="User not found")
-
-        table_entry.longitude = coordinates.longitude
-        table_entry.latitude = coordinates.latitude
-        session.commit()
+        self.user_repository.update_coordinates(username, coordinates)

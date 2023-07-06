@@ -26,13 +26,9 @@ jobs:
         pytest src/
     - name: Build coverage file
       run: |
-        pytest --cache-clear --cov=src --cov-report=xml src/
-    - name: Upload coverage to Codecov
+        pytest --cov=src/ --cov-report xml src/tests/ 
+    - name: Upload coverage report to Codecov
       uses: codecov/codecov-action@v3
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        flags: unittests
-        env_vars: OS,PYTHON
-        name: codecov-umbrella
-        fail_ci_if_error: true
-        verbose: true
+        file: ./coverage.xml

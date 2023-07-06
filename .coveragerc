@@ -1,0 +1,7 @@
+[run]
+omit =
+    src/infrastructure/user_repository_postgresql.py
+    src/infrastructure/follow_repository_postgresql.py
+    src/infrastructure/block_repository_postgresql.py
+    src/config.py
+    src/presentation/user_api.py

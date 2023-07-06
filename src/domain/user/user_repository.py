@@ -2,6 +2,7 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 from src.domain.user.user import User
+from src.infrastructure.models.coordinates import Coordinates
 from src.infrastructure.models.user_dto import UserDTO, UserSignUpDTO
 
 
@@ -70,4 +71,39 @@ class IUserRepository(ABC):
     @abstractmethod
     def update(self, user_data: UserDTO):
         """Update a user"""
+        raise NotImplementedError
+    
+    @abstractmethod
+    def find_by_device_token(self, device_token: str) -> Optional[User]:
+        """Get a user by device token"""
+        raise NotImplementedError
+
+    @abstractmethod
+    def update_device_token(self, username: str, device_token: str):
+        """Update a user's device token"""
+        raise NotImplementedError
+    
+    @abstractmethod
+    def remove_user_device_token(self, device_token: str):
+        """Remove a user's device token"""
+        raise NotImplementedError
+
+    @abstractmethod
+    def get_device_token(self, username: str) -> str:
+        """Get a user's device token"""
+        raise NotImplementedError
+
+    @abstractmethod
+    def increment_password_changes(self, username: str):
+        """Increment password changes"""
+        raise NotImplementedError
+    
+    @abstractmethod
+    def update_coordinates(self, username: str, coordinates: Coordinates):
+        """Update a user's coordinates"""
+        raise NotImplementedError
+    
+    @abstractmethod
+    def update_user_last_login(self, username: str):
+        """Update a user's last login"""
         raise NotImplementedError
