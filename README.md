@@ -18,7 +18,7 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
-[![codecov](https://codecov.io/gh/taller-II-2023-q1-g8/fiufit.fiuba.goal.api/branch/main/graph/badge.svg?token=A8HGDNYWTN)](https://codecov.io/gh/taller-II-2023-q1-g8/fiufit.fiuba.goal.api)
+[![codecov](https://codecov.io/gh/taller-II-2023-q1-g8/fiufit.fiuba.user.api/branch/master/graph/badge.svg?token=CM3FJKHBQ0)](https://codecov.io/gh/taller-II-2023-q1-g8/fiufit.fiuba.user.api)
 
 
 
