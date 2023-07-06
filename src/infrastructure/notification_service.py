@@ -5,7 +5,6 @@ import requests, os
 SEND_NOTIFICATIONS_URL = os.environ.get("SEND_NOTIFICATIONS_URL")
 if SEND_NOTIFICATIONS_URL is None:
     print("SEND_NOTIFICATIONS_URL not found in Environment")
-    exit(-1)
 
 PRIVATE_KEY_PATH = "fiufit-73a11.json"
 
@@ -21,6 +20,9 @@ class NotificationService:
         return credentials.token
 
     def send_notification(self, device_token: str, title: str, body: str):
+        if SEND_NOTIFICATIONS_URL is None:
+            return
+
         url = SEND_NOTIFICATIONS_URL
 
         headers = {
