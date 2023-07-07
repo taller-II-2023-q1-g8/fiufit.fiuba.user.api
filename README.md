@@ -117,10 +117,10 @@ To get a local copy up and running follow these simple example steps.
 ## Usage
 
 This is a basic example of the main workflow:
-- **Create a user:** ``` PUT \<app-url>/user/ ```
-- **Create an admin:** ``` PUT \<app-url>/user/admin/``` 
-- **View All Non-admin Users** ``` GET \<app-url>/user/``` 
-- **View All Admin Users** ``` GET \<app-url>/user/admin/``` 
+- **Create a user:** ``` PUT <app-url>/user/ ```
+- **Create an admin:** ``` PUT <app-url>/user/admin/``` 
+- **View All Non-admin Users** ``` GET <app-url>/user/``` 
+- **View All Admin Users** ``` GET <app-url>/user/admin/``` 
 
 _For more examples, please refer to the [Documentation](https://fiufit-usuarios.onrender.com/docs)_
 
