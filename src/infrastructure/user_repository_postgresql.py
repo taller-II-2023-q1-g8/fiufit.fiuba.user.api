@@ -152,7 +152,7 @@ class UserTable(IUserRepository):
             .first())
     
         if table_entry:
-            return self.find_by_username(table_entry.username)
+            return self.find_non_admin_by_username(table_entry.username)
 
     def update_device_token(self, username: str, device_token: str):
         """Update a user's device token"""
