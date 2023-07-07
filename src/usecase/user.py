@@ -161,7 +161,7 @@ class UserService:
         token = self.user_repository.get_device_token(username)
         if token is None:
             raise exceptions.HTTPException(status_code=404, detail="Token not found")
-        return token.device_token
+        return token
 # FALTA
     def asks_if_user_is_blocked(self, username: str):
         """User asks if a user is blocked"""
