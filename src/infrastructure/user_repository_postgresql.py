@@ -180,7 +180,11 @@ class UserTable(IUserRepository):
             .filter(UserDeviceToken.username == username)
             .first()
         )
-        return token_entry.device_token
+
+        if token_entry:
+            return token_entry.device_token
+        else:
+            return None
 
     def increment_password_changes(self, username: str):
         """Increment password changes"""
